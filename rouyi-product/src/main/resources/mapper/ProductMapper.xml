@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.product.mapper.ProductMapper">
+
+	<resultMap type="ProductModel" id="ProductResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<id column="productname" jdbcType="VARCHAR" property="productname" />
+		<result column="date" jdbcType="VARCHAR" property="date" />
+		<result column="rkname" jdbcType="VARCHAR" property="rkname" />
+		<result column="bz" jdbcType="VARCHAR" property="bz" />
+		<result column="userid" jdbcType="VARCHAR" property="userid" />
+		<result column="did" jdbcType="VARCHAR" property="did" />
+		<result column="psize" jdbcType="VARCHAR" property="psize" />
+		<result column="pcode" jdbcType="VARCHAR" property="pcode" />
+		<result column="stock" jdbcType="VARCHAR" property="stock" />
+		<result column="ssck" jdbcType="VARCHAR" property="ssck" />
+		<result column="depname" jdbcType="VARCHAR" property="depname" />
+	</resultMap>
+
+</mapper> 
