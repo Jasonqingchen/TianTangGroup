@@ -18,5 +18,87 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="ssck" jdbcType="VARCHAR" property="ssck" />
 		<result column="depname" jdbcType="VARCHAR" property="depname" />
 	</resultMap>
+	<!--条件查询-->
+	<select id="selectClientByNameAndSize" resultMap="ProductResult">
+		select * from product where 1=1
+		<if test="productname != null and productname != ''">
+			AND productname = #{productname}
+		</if>
+		<if test="psize != null and psize != ''">
+			AND psize = #{psize}
+		</if>
+	</select>
+	<!--列表查询-->
+	<select id="selectAll" resultMap="ProductResult">
+		select * from product where 1=1
+		<if test="ssck != null and ssck != ''">
+			AND ssck = #{ssck}
+		</if>
+		<if test="productname != null and productname != ''">
+			AND productname = #{productname}
+		</if>
+		<if test="pcode != null and pcode != ''">
+			AND pcode = #{pcode}
+		</if>
+	</select>
+	<!--删除-->
+	<delete id="deleteProById">
+		delete from product as p  where p.id = #{id}
+	</delete>
 
+	<!--根据 id 查询对象-->
+	<select id="selectProById" resultMap="ProductResult">
+		select * from product where id =#{id}
+	</select>
+
+	<!--插入-->
+	<insert id="insertPro" parameterType="ProductModel">
+		insert into product(
+		<if test="id != null and id != ''">id,</if>
+		<if test="productname != null and productname != ''">productname,</if>
+		<if test="date != null and date != ''">date,</if>
+		<if test="rkname != null and rkname != ''">rkname,</if>
+		<if test="bz != null and bz != ''">bz,</if>
+		<if test="userid != null and userid != ''">userid,</if>
+		<if test="did != null and did != ''">did,</if>
+		<if test="psize != null and psize != ''">psize,</if>
+		<if test="pcode != null and pcode != ''">pcode,</if>
+		<if test="stock != null and stock != ''">stock,</if>
+		<if test="ssck != null and ssck != ''">ssck,</if>
+		<if test="depname != null and depname != ''">depname</if>
+		)values(
+		<if test="id != null and id != ''">#{id},</if>
+		<if test="productname != null and productname != ''">#{productname},</if>
+		<if test="date != null and date != ''">#{date},</if>
+		<if test="rkname != null and rkname != ''">#{rkname},</if>
+		<if test="bz != null and bz != ''">#{bz},</if>
+		<if test="userid != null and userid != ''">#{userid},</if>
+		<if test="did != null and did != ''">#{did},</if>
+		<if test="psize != null and psize != ''">#{psize},</if>
+		<if test="pcode != null and pcode != ''">#{pcode},</if>
+		<if test="stock != null and stock != ''">#{stock},</if>
+		<if test="ssck != null and ssck != ''">#{ssck},</if>
+		<if test="depname != null and depname != ''">#{depname}</if>
+		)
+	</insert>
+
+	<!--修改客户信息-->
+	<update id="updateProduct" parameterType="ProductModel">
+		update product
+		<set>
+			<if test="id != null and id != ''">id = #{id},</if>
+			<if test="productname != null and productname != ''">productname = #{productname},</if>
+			<if test="date != null and date != ''">date = #{date},</if>
+			<if test="rkname != null and rkname != ''">rkname = #{rkname},</if>
+			<if test="bz != null and bz != ''">bz = #{bz},</if>
+			<if test="userid != null and userid != ''">userid = #{userid},</if>
+			<if test="did != null and did != ''">did = #{did},</if>
+			<if test="psize != null and psize != ''">psize = #{psize},</if>
+			<if test="pcode != null and pcode != ''">pcode = #{pcode},</if>
+			<if test="stock != null and stock != ''">stock = #{stock},</if>
+			<if test="ssck != null and ssck != ''">ssck = #{ssck},</if>
+			<if test="depname != null and depname != ''">depname = #{depname}</if>
+		</set>
+		where id = #{id}
+	</update>
 </mapper> 

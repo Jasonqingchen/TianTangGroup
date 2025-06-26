@@ -153,7 +153,7 @@ public class ArchivesController extends BaseController {
         for (String id : idss)
         {
             FileModel fileModels = fMapper.selectFileById(id);
-            removeFile("liuqingchen",fileModels.getFilename());
+            removeFile(bucketName,fileModels.getFilename());
             fMapper.deleteFilesById(id);
         }
         return AjaxResult.success();

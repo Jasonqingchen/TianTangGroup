@@ -256,6 +256,7 @@
         <module>ruoyi-common</module>
         <module>rouyi-report</module>
         <module>rouyi-archives</module>
+        <module>rouyi-product</module>
     </modules>
     <packaging>pom</packaging>
 
