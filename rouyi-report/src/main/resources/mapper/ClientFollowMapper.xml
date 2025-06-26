@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.archives.mapper.ClientFollowMapper">
+
+	<resultMap type="ClientFollowModel" id="ReporFollowtResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="bz" jdbcType="VARCHAR" property="bz" />
+		<result column="gjdate" jdbcType="VARCHAR" property="gjdate" />
+		<result column="balance" jdbcType="VARCHAR" property="balance" />
+		<result column="flag" jdbcType="VARCHAR" property="flag" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="ssxs" jdbcType="VARCHAR" property="ssxs" />
+		<result column="cid" jdbcType="VARCHAR" property="cid" />
+		<result column="month" jdbcType="VARCHAR" property="month" />
+	</resultMap>
+
+	<!--查询列表-->
+	<select id="selectListAll"  resultMap="ReporFollowtResult">
+		select  * from clientfollow
+	</select>
+
+	<!--根据 ID 查询跟进详情-->
+	<select id="selectClientFollowById"  resultMap="ReporFollowtResult">
+		select  * from clientfollow as c  where c.cid = #{id} order by c.gjdate desc
+	</select>
+
+
+	<select id="selectAllGroupBySsxs" resultMap="ReporFollowtResult">
+		select cf.ssxs,count(1) as cou  FROM clientfollow as cf LEFT JOIN client as c on cf.cid = c.id GROUP BY cf.ssxs;
+	</select>
+
+	<!--插入-->
+	<insert id="insertClientFollow" parameterType="ClientFollowModel">
+		insert into clientfollow(
+		<if test="id != null and id != ''">id,</if>
+		<if test="ssxs != null and ssxs != ''">ssxs,</if>
+		<if test="status != null and status != ''">status,</if>
+		<if test="gjdate != null and gjdate != ''">gjdate,</if>
+		<if test="flag != null and flag != ''">flag,</if>
+		<if test="balance != null and balance != ''">balance,</if>
+		<if test="bz != null and bz != ''">bz,</if>
+		<if test="cid != null and cid != ''">cid,</if>
+		<if test="month != null and month != ''">month</if>
+		)values(
+		<if test="id != null and id != ''">#{id},</if>
+		<if test="ssxs != null and ssxs != ''">#{ssxs},</if>
+		<if test="status != null and status != ''">#{status},</if>
+		<if test="gjdate != null and gjdate != ''">#{gjdate},</if>
+		<if test="flag != null and flag != ''">#{flag},</if>
+		<if test="balance != null and balance != ''">#{balance},</if>
+		<if test="bz != null and bz != ''">#{bz},</if>
+		<if test="cid != null and cid != ''">#{cid},</if>
+		<if test="month != null and month != ''">#{month}</if>
+		)
+	</insert>
+
+
+</mapper> 

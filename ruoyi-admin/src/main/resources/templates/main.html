@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>坎帕拉 Map</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+<!--<iframe src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d293913.45841772!2d32.5987722!3d0.265596!3m2!1i1024!2i768!4f13.1!2m1!1z6YWS5bqX!5e1!3m2!1szh-CN!2sug!4v1749658758160!5m2!1szh-CN!2sug" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>-->
+<iframe width="100%" height="100%" src="https://www.openstreetmap.org/export/embed.html?bbox=32.564506530761726%2C0.3188164471071926%2C32.62716293334962%2C0.3543926529625875&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?#map=15/0.33660/32.59583">查看更大的地图</a></small>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+
+        });
+    </script>
+</body>
+</html>

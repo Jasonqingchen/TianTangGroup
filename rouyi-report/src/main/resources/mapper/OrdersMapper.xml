@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.archives.mapper.OrdersMapper">
+
+	<resultMap type="OrdersModel" id="OrderResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="bz" jdbcType="VARCHAR" property="bz" />
+		<result column="date" jdbcType="VARCHAR" property="date" />
+		<result column="balance" jdbcType="VARCHAR" property="balance" />
+		<result column="receiptnumber" jdbcType="VARCHAR" property="receiptnumber" />
+		<result column="pay" jdbcType="VARCHAR" property="pay" />
+		<result column="ssxs" jdbcType="VARCHAR" property="ssxs" />
+		<result column="cid" jdbcType="VARCHAR" property="cid" />
+		<result column="month" jdbcType="VARCHAR" property="month" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="years" jdbcType="VARCHAR" property="years" />
+	</resultMap>
+	<!--验证用户名下是否存在订单-->
+	<select id="selectOrderByCid" resultType="java.lang.Integer">
+		select count(1) from orders where 1=1
+		<if test="cid != null and cid != ''">
+			AND cid = #{id}
+		</if>
+	</select>
+	<!--订单编号验证是否存在-->
+	<select id="selectClientByReceiptnumber" resultMap="OrderResult">
+		select * from orders where 1=1
+		<if test="receiptnumber != null and receiptnumber != ''">
+			AND receiptnumber = #{receiptnumber}
+		</if>
+	</select>
+	<!--今年收入-->
+	<select id="selectSumPayY" resultType="java.lang.String">
+		select sum(pay) from Orders where years = #{year}
+	</select>
+	<!--本月收-->
+	<select id="selectSumPayM" resultType="java.lang.String">
+		select sum(pay) from Orders where month = #{month}
+	</select>
+	<!--今日总收入-->
+	<select id="selectSumPayD" resultType="java.lang.String">
+		select sum(pay) from Orders where date = #{day}
+	</select>
+	<!--今日订单数量-->
+	<select id="selectCountOrder" resultType="java.lang.String">
+		select count(1) from Orders where date = #{day}
+	</select>
+
+	<!--每个销售的订单数量-->
+	<select id="selectAllGroupBySsxs" resultMap="OrderResult">
+		select orders.ssxs,count(1) AS cou  FROM orders left JOIN client on orders.cid = client.id GROUP BY orders.ssxs;
+	</select>
+	<!--查询列表-->
+	<select id="selectAll"  resultMap="OrderResult">
+		select  * from orders as o where 1=1
+		<if test="ssxs != null and ssxs != ''">
+			AND o.ssxs like concat('%', #{ssxs}, '%')
+		</if>
+		<if test="name != null and name != ''">
+			AND o.name like concat('%', #{name}, '%')
+		</if>
+		<if test="month != null and month != ''">
+			AND o.month like concat('%', #{month}, '%')
+		</if>
+		<if test="date != null and date != ''">
+			AND o.date = #{date}
+		</if>
+		<if test="receiptnumber != null and receiptnumber != ''">
+			AND c.receiptnumber like concat('%', #{receiptnumber}, '%')
+		</if>
+	</select>
+	<!--给 echarts 返回数据 销售订单统计-->
+	<select id="selectAllByName" resultMap="OrderResult">
+		select ssxs,count(pay) as cou from orders where 1=1
+		<if test="month != null and month != ''">
+			AND month = #{month}
+		</if>
+		<if test="date != null and date != ''">
+			AND date = #{date}
+		</if>
+		GROUP BY ssxs
+
+	</select>
+	<!--热力图-->
+
+	<select id="selectByDate" resultMap="OrderResult">
+		select date,sum(pay) as cou from orders  where 1=1
+		<if test="years != null and years != ''">
+			AND years = #{year}
+		</if>
+		group by date;
+
+	</select>
+	<!--给 echarts 返回数据 销售年度销量统计-->
+	<select id="selectAllByNamendtj" resultMap="OrderResult">
+		select ssxs,sum(pay) as cou from orders  where 1=1
+		<if test="years != null and years != ''">
+			AND years = #{year}
+		</if>
+		group by ssxs;
+
+	</select>
+	<!--插入-->
+	<insert id="insertOrder" parameterType="OrdersModel">
+		insert into orders(
+		<if test="id != null and id != ''">id,</if>
+		<if test="ssxs != null and ssxs != ''">ssxs,</if>
+		<if test="pay != null and pay != ''">pay,</if>
+		<if test="date != null and date != ''">date,</if>
+		<if test="name != null and name != ''">name,</if>
+		<if test="balance != null and balance != ''">balance,</if>
+		<if test="bz != null and bz != ''">bz,</if>
+		<if test="receiptnumber != null and receiptnumber != ''">receiptnumber,</if>
+		<if test="month != null and month != ''">month,</if>
+		<if test="cid != null and cid != ''">cid,</if>
+		<if test="years != null and years != ''">years</if>
+		)values(
+		<if test="id != null and id != ''">#{id},</if>
+		<if test="ssxs != null and ssxs != ''">#{ssxs},</if>
+		<if test="pay != null and pay != ''">#{pay},</if>
+		<if test="date != null and date != ''">#{date},</if>
+		<if test="name != null and name != ''">#{name},</if>
+		<if test="balance != null and balance != ''">#{balance},</if>
+		<if test="bz != null and bz != ''">#{bz},</if>
+		<if test="receiptnumber != null and receiptnumber != ''">#{receiptnumber},</if>
+		<if test="month != null and month != ''">#{month},</if>
+		<if test="cid != null and cid != ''">#{cid},</if>
+		<if test="years != null and years != ''">#{years}</if>
+		)
+	</insert>
+	<!--删除-->
+	<delete id="deleteReportById">
+		delete from orders as o  where o.id = #{id}
+	</delete>
+</mapper> 

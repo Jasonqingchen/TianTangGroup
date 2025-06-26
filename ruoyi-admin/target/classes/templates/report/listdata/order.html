@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('客户订单')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-client-order" th:object="${cModel}">
+			<input name="id" id="id" type="hidden"  th:field="*{id}" />
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所属销售：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="ssxs" id="ssxs" class="form-control m-b" th:with="type=${@dict.getType('report_client_ssxs')}">
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{ssxs}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">客户姓名：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="balance" id="balance" placeholder="客户姓名" th:field="*{name}"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">发票号：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="发票号" required></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">支付金额：</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="pay" id="pay" placeholder="金额" required></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">客户描述：</label>
+				<div class="col-sm-8">
+					<textarea class="form-control" type="text" name="bz" id="bz" placeholder="跟进详情" th:field="*{bz}"></textarea>
+				</div>
+			</div>
+			<!--<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-sm btn-primary" onclick="submit1()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+				</div>
+			</div>-->
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "report/listdata";
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/order", $('#form-client-order').serialize());
+			}
+		}
+		function submit1(){
+			$.ajax({
+				url: prefix + "/order",
+				data: $('#form-client-order').serialize(),
+				type: "post",
+				success: function(result) {
+					if (result.code == web_status.SUCCESS) {
+						layer.msg("保存成功,正在刷新数据请稍候……", {
+							icon: 1,
+							time: 500,
+							shade: [0.1, '#8F8F8F']
+						},function() {
+							location.reload();
+						});
+						$.modal.close();
+						$.modal.msgSuccess("下单成功，请到订单订单列表中查看");
+					} else {
+						alert(result.msg);
+					}
+				}
+			})
+		}
+
+	</script>
+</body>
+</html>

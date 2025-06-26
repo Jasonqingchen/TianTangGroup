@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增客户信息')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-client-add">
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">新增时间：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="date" name="date" id="date" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">最后跟进时间：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="date" name="gjdate" id="gjdate" required>
+            </div>
+        </div>-->
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">新增时间：</label>
+                <div class="col-sm-9">
+                    <div class="input-group date">
+                        <input type="date" class="form-control" value="" name="date" id="date" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">最后跟进时间：</label>
+                <div class="col-sm-9">
+                    <div class="input-group date">
+                        <input type="date" class="form-control" value="" name="gjdate" id="gjdate" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户姓名：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="name" id="name" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户电话：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="phone" id="phone" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所属销售：</label>
+            <div class="col-sm-8">
+                <div class="input-group" style="width: 100%">
+                    <select name="ssxs" class="form-control m-b" th:with="type=${@dict.getType('report_client_ssxs')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户性别：</label>
+            <div class="col-sm-8">
+                <div class="input-group" style="width: 100%">
+                    <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('report_client_sex')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">客户地址：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="address" id="address">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户邮箱：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="email" id="email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户状态：</label>
+            <div class="col-sm-8">
+                <div class="input-group" style="width: 100%">
+                    <select name="status" class="form-control m-b" th:with="type=${@dict.getType('report_client_status')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" type="text" name="bz" id="bz" placeholder="请输入备注"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "report/listdata";
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-client-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

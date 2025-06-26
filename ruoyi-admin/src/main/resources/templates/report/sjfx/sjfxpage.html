@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('数据分析')" />
+	<th:block th:include="include :: bootstrap-select-css" />
+</head>
+<body class="gray-bg">
+<div class="row  border-bottom white-bg dashboard-header">
+	<div class="col-sm-12" style="text-align: left">
+		<p style="color: #bd2c00;"><strong>提示：通过数据图形化分析可直观的观察客户以及员工的区间状态，使用者能够更好的进行对客户和员工进行分析和及时的改变策略</strong>
+		</p>
+	</div>
+</div><br>
+<div class="row">
+	<div class="col-sm-3">
+		<div class="ibox">
+			<div class="ibox-content" style="background-color: #eae2c0">
+				<h5>今日订单数量</h5>
+				<h1 class="no-margins"><strong id="ocount"></strong></h1>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="ibox">
+			<div class="ibox-content" style="background-color: #f1c097">
+				<h5>今日收入</h5>
+				<h1 class="no-margins"> <strong id="d"></strong></h1>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="ibox">
+			<div class="ibox-content" style="background-color: #90bfef">
+				<h5>本月目前收入</h5>
+				<h1 class="no-margins"><strong id="m"></strong></h1>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-3">
+		<div class="ibox">
+			<div class="ibox-content" style="background-color: #66f3d9">
+				<h5>总收入</h5>
+				<h1 class="no-margins"><strong id="y"></strong></h1>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>销售人员业绩转化率</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="echarts" id="echarts1"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>员工订单分析</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="echarts" id="echarts2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>年度销售业绩统计</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="echarts" id="echarts3"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>客户类型分析</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="echarts" id="echarts5"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>热力图(日销售额展示)</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="float-right" style="height: 400px;" id="echarts6"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>客户地区分布</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="float-right" style="height: 400px;" id="echarts4"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</div>
+
+
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-resizable-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "report/sjfx";
+        $(function() {
+			var options = {
+				y:'',
+				m:'',
+				d:'',
+				ocount:''
+			}
+			//头部数据
+
+			//员工转化率
+			$.ajax({
+				url: prefix + "/tbdata",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					if(data[0].y==null){
+						data[0].y='0,00';
+					}
+					if(data[0].m==null){
+						data[0].m='0,00';
+					}
+					if(data[0].d==null){
+						data[0].d='0,00';
+					}
+					document.getElementById('y').innerText= data[0].y+"       UGX";
+					document.getElementById('m').innerText= data[0].m+"       UGX";
+					document.getElementById('d').innerText= data[0].d+"       UGX";
+					document.getElementById('ocount').innerText= data[0].ocount;
+
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+
+
+
+
+			var bcount =[];//拜访次数
+			var zhcount = [];//转化率
+			var name = [];//转化率
+			//员工转化率
+			$.ajax({
+				url: prefix + "/zhtj",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					name = data.name;
+					bcount = data.bcount;
+					zhcount = data.zhcount;
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+			//转化率
+			var c1 = echarts.init(document.getElementById("echarts1"));
+			var option1 = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						crossStyle: {
+							color: '#999'
+						}
+					}
+				},
+				toolbox: {
+					feature: {
+						dataView: { show: true, readOnly: false },
+						magicType: { show: true, type: ['line', 'bar'] },
+						restore: { show: true },
+						saveAsImage: { show: true }
+					}
+				},
+				legend: {
+					data: ['拜访次数', '转化率']
+				},
+				xAxis: [
+					{
+						type: 'category',
+						data: name,
+						axisPointer: {
+							type: 'shadow'
+						}
+					}
+				],
+				yAxis: [    {
+					type: 'value',
+					name: '拜访次数',
+					min: 0,
+					max: 300,
+					interval: 50,
+					axisLabel: {
+						formatter: '{value} 次'
+					}
+				},
+					{
+						type: 'value',
+						name: '转化率',
+						min: 0,
+						max: 100,
+						interval: 50,
+						axisLabel: {
+							formatter: '{value} %'
+						}
+					}
+				],
+				series: [
+					{
+						name: '拜访次数',
+						type: 'bar',
+						tooltip: {
+							valueFormatter: function (value) {
+								return value + '次';
+							}
+						},
+						data: bcount
+					},
+					{
+						name: '转化率',
+						type: 'line',
+						yAxisIndex: 1,
+						tooltip: {
+							valueFormatter: function (value) {
+								return value + '%';
+							}
+						},
+						data: zhcount
+					}
+				]
+			};
+			c1.setOption(option1);
+			$(window).resize(c1.resize);
+			var ordername = [];
+			var ordercou = [];
+			//订单数据
+			$.ajax({
+				url: prefix + "/ordertj",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					ordername = data.name;
+					ordercou = data.cou;
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+			var c2 = echarts.init(document.getElementById("echarts2"));
+			option2 = {
+				title: {
+					text: ''
+				},
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'shadow'
+					}
+				},
+				legend: {},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				xAxis: {
+					type: 'value',
+					boundaryGap: [0, 0.01]
+				},
+				yAxis: {
+					type: 'category',
+					data: ordername
+				},
+				series: [
+					{
+						name: '订单数量',
+						type: 'bar',
+						data: ordercou
+					}
+				]
+			};
+			c2.setOption(option2);
+			$(window).resize(c2.resize);
+
+
+			var ndname = [];//年度销售统计名字数组
+			var ndcou = [];//年度销量
+			//年度销售额
+			$.ajax({
+				url: prefix + "/nxltj",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					ndname = data.ndname;
+					ndcou = data.ndcou;
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+			//年度销售额统计
+			var c3 = echarts.init(document.getElementById("echarts3"));
+			option3 = {
+				title: {
+					text: ''
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data: ['销量']
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				toolbox: {
+					feature: {
+						saveAsImage: {}
+					}
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ndname
+				},
+				yAxis: {
+					type: 'value'
+				},
+				series: [
+					{
+						name: '销量',
+						type: 'line',
+						stack: 'Total',
+						data: ndcou
+					}
+				]
+			};
+			c3.setOption(option3);
+			$(window).resize(c3.resize);
+			//客户地区分布
+
+			var dqb = [];//地区分布
+			$.ajax({
+				url: prefix + "/dqfb",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					for (let i = 0; i < data.length; i++) {
+						dqb.push(data[i]);
+					}
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+			var c4 = echarts.init(document.getElementById("echarts4"));
+			option4 = {
+				tooltip: {
+					trigger: 'item'
+				},
+				legend: {
+					top: '5%',
+					left: 'center'
+				},
+				series: [
+					{
+						name: 'Access From',
+						type: 'pie',
+						radius: ['40%', '70%'],
+						avoidLabelOverlap: false,
+						padAngle: 5,
+						itemStyle: {
+							borderRadius: 10
+						},
+						label: {
+							show: false,
+							position: 'center'
+						},
+						emphasis: {
+							label: {
+								show: true,
+								fontSize: 40,
+								fontWeight: 'bold'
+							}
+						},
+						labelLine: {
+							show: false
+						},
+						data: dqb
+					}
+				]
+			};
+			c4.setOption(option4);
+			$(window).resize(c4.resize);
+			//客户类型分析
+			var khtype = [];//地区分布
+			var typename = [];
+			$.ajax({
+				url: prefix + "/khtype",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					for (let i = 0; i < data.length; i++) {
+						khtype.push(data[i]);
+						typename.push(data[i].name)
+					}
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+			var c5 = echarts.init(document.getElementById("echarts5"));
+			option5 = {
+				title: {
+					text: ''
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: '{a} <br/>{b} : {c}'
+				},
+				toolbox: {
+					feature: {
+						dataView: { readOnly: false },
+						restore: {},
+						saveAsImage: {}
+					}
+				},
+				legend: {
+					data: typename
+				},
+				series: [
+					{
+						name: '类型',
+						type: 'funnel',
+						left: '10%',
+						top: 60,
+						bottom: 60,
+						width: '80%',
+						min: 0,
+						max: 100,
+						minSize: '0%',
+						maxSize: '100%',
+						sort: 'descending',
+						gap: 2,
+						label: {
+							show: true,
+							position: 'inside'
+						},
+						labelLine: {
+							length: 10,
+							lineStyle: {
+								width: 1,
+								type: 'solid'
+							}
+						},
+						itemStyle: {
+							borderColor: '#fff',
+							borderWidth: 1
+						},
+						emphasis: {
+							label: {
+								fontSize: 20
+							}
+						},
+						data: khtype
+					}
+				]
+			};
+			c5.setOption(option5);
+			$(window).resize(c5.resize);
+
+			//热力图
+			var rltdata = [];
+			$.ajax({
+				url: prefix + "/rltdata",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					for (let i = 0; i < data.length; i++) {
+						rltdata.push(data[i]);
+					}
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+			var c6 = echarts.init(document.getElementById("echarts6"));
+			option6 = {
+				title: {
+					top: 30,
+					left: 'center',
+					text: '日销售额展示'
+				},
+				tooltip: {},
+				visualMap: {
+					min: 0,
+					max: 10000000,
+					type: 'piecewise',
+					orient: 'horizontal',
+					left: 'center',
+					top: 65
+				},
+				calendar: {
+					top: 120,
+					left: 30,
+					right: 30,
+					cellSize: ['auto', 13],
+					range: '2025',
+					itemStyle: {
+						borderWidth: 0.5
+					},
+					yearLabel: { show: false }
+				},
+				series: {
+					type: 'heatmap',
+					coordinateSystem: 'calendar',
+					data: rltdata
+				}
+			};
+			c6.setOption(option6);
+			$(window).resize(c6.resize);
+        });
+
+    </script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+
+
+</script>
+</html>

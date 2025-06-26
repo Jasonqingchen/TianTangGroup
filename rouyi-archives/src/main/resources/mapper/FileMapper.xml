@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.archives.mapper.FileMapper">
+
+	<resultMap type="FileModel" id="FileResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="bz" jdbcType="VARCHAR" property="bz" />
+		<result column="date" jdbcType="VARCHAR" property="date" />
+		<result column="fileurl" jdbcType="VARCHAR" property="fileurl" />
+		<result column="filename" jdbcType="VARCHAR" property="filename" />
+		<result column="uploadname" jdbcType="VARCHAR" property="uploadname" />
+		<result column="userid" jdbcType="VARCHAR" property="userid" />
+		<result column="did" jdbcType="VARCHAR" property="did" />
+		<result column="dname" jdbcType="VARCHAR" property="dname" />
+	</resultMap>
+
+	<!--根据文件 id 查询对象-->
+	<select id="selectFileById" resultMap="FileResult">
+		select * from files where id = #{id}
+	</select>
+	<!--查询本部门人员的上传数量-->
+	<select id="selectAllCou" resultMap="FileResult">
+		select uploadname,count(1) as cou from files where did = #{id} GROUP BY uploadname;
+	</select>
+	<!--查询登录这命名下的信息-->
+	<select id="selectAllByUserIdAndDid" resultMap="FileResult">
+		select * from files where 1=1
+		<if test="userid != null and userid != ''">
+			AND userid = #{userid}
+		</if>
+		<if test="did != null and did != ''">
+			AND did = #{did}
+		</if>
+		<if test="filename != null and filename != ''">
+			AND filename = #{filename}
+		</if>
+		<if test="date != null and date != ''">
+			AND date like concat('%', #{date}, '%')
+		</if>
+	</select>
+
+	<!--插入-->
+	<insert id="insertFile" parameterType="FileModel">
+		insert into files(
+		<if test="id != null and id != ''">id,</if>
+		<if test="date != null and date != ''">date,</if>
+		<if test="filename != null and filename != ''">filename,</if>
+		<if test="fileurl != null and fileurl != ''">fileurl,</if>
+		<if test="bz != null and bz != ''">bz,</if>
+		<if test="userid != null and userid != ''">userid,</if>
+		<if test="uploadname != null and uploadname != ''">uploadname,</if>
+		<if test="did != null and did != ''">did,</if>
+		<if test="dname != null and dname != ''">dname</if>
+		)values(
+		<if test="id != null and id != ''">#{id},</if>
+		<if test="date != null and date != ''">#{date},</if>
+		<if test="filename != null and filename != ''">#{filename},</if>
+		<if test="fileurl != null and fileurl != ''">#{fileurl},</if>
+		<if test="bz != null and bz != ''">#{bz},</if>
+		<if test="userid != null and userid != ''">#{userid},</if>
+		<if test="uploadname != null and uploadname != ''">#{uploadname},</if>
+		<if test="did != null and did != ''">#{did},</if>
+		<if test="dname != null and dname != ''">#{dname}</if>
+		)
+	</insert>
+
+	<!--删除-->
+	<delete id="deleteFilesById">
+		delete from files as f  where f.id = #{id}
+	</delete>
+</mapper> 

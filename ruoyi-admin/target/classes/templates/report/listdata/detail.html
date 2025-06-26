@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('跟进客户')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-client-follow" th:object="${fModel}">
+			<input name="cid" id="cid" type="hidden"  th:field="*{cid}" />
+			<div class="form-group">
+				<label class="col-sm-3 control-label">所属销售：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="ssxs" id="ssxs" class="form-control m-b" th:with="type=${@dict.getType('report_client_ssxs')}">
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{ssxs}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">客户状态：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="status" id="status" class="form-control m-b" th:with="type=${@dict.getType('report_client_status')}">
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{status}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">跟进详情：</label>
+				<div class="col-sm-8">
+					<textarea class="form-control" type="text" name="bz" id="bz" placeholder="跟进详情" th:field="*{bz}"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-sm btn-primary" onclick="submit1()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+				</div>
+			</div>
+		</form>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script type="text/javascript">
+		var prefix = ctx + "report/listdata";
+		function submit1(){
+			$.ajax({
+				url: prefix + "/follow",
+				data: $('#form-client-follow').serialize(),
+				type: "post",
+				success: function(result) {
+					if (result.code == web_status.SUCCESS) {
+						layer.msg("保存成功,正在刷新数据请稍候……", {
+							icon: 1,
+							time: 500,
+							shade: [0.1, '#8F8F8F']
+						},function() {
+							location.reload();
+						});
+						$.modal.close();
+						$.modal.msgSuccess("跟进成功");
+					} else {
+						alert(result.msg);
+					}
+				}
+			})
+		}
+
+	</script>
+</body>
+</html>

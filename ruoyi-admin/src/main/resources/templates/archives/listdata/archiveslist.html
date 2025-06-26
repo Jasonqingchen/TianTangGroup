@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('文件上传')" />
+	<th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="form-group">
+						<label class="font-noraml">多文件上传</label>
+						<div class="file-loading">
+							<input id="multipleFile" name="file" type="file" multiple>
+						</div>
+					</div>
+					<hr>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4" style="height: 100%">
+			<div class="echarts" id="numtj" ></div>
+		</div>
+	</div>
+
+</div>
+<div class="container-div">
+	<div class="row">
+	<div class="col-sm-12 search-collapse">
+		<form id="client-from">
+			<input type="hidden" id="id" name="id">
+			<div class="select-list">
+				<ul>
+					<li>
+						文件名称：<input type="text" name="filename" id="filename" placeholder="文件名称"/>
+					</li>
+					<li>
+						<input type="date" class="form-control" name="date" id="date" placeholder="yyyy-MM-dd"/>
+					</li>
+					<li>
+
+						<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+						<a class="btn btn-warning btn-rounded btn-sm" onclick="resetPre()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+     	<div class="btn-group-sm" id="toolbar" role="group">
+	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
+	            <i class="fa fa-remove"></i> 批量删除
+	        </a>
+			<a shiro:hasAnyRoles="admin,don" class="btn btn-primary btn-xs" href="javascript:;" onclick="$.operate.downloadFile()"><i class="glyphicon glyphicon-save"></i>下载</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>请上传[bmp, gif, jpg, jpeg, png, doc, docx, xls, xlsx, ppt, pptx, html, htm, txt, rar, zip, gz, bz2, mp4, avi, rmvb, pdf]格式</strong></span>
+        </div>
+			<div class="col-sm-12 select-table table-bordered">
+					<table id="bootstrap-table" data-resizable="true"
+						   data-reorderable-columns="true"></table>
+			</div>
+		</div>
+	</div>
+</table>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: bootstrap-table-resizable-js" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "archives/listdata";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                importUrl: prefix + "/importData",
+                importTemplateUrl: prefix + "/importTemplate",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        search: false,
+				rememberSelected: true,
+		        modalName: "文件",
+				showColumns: true,
+                columns: [{
+		            checkbox: true
+		        },{
+					field : 'id',
+					title : 'File ID',
+					visible:false
+				},{
+					field : 'uploadname',
+					title : '上传人',
+					visible:false
+				},{
+					field : 'filename',
+					title : '文件名称',
+					width:80,
+				},
+				{
+					field : 'bz',
+					title : '文件路径',
+					width:200,
+				}, {
+					field : 'date',
+					title : '上传时间',
+						width:100,
+				},{
+						field : 'dname',
+						title : '上传人所属部门',
+						width:100,
+					},{
+						field : 'uploadname',
+						title : '上传人',
+						width:100,
+					},{
+		            title: '操作',
+		            align: 'center',
+					width:100,
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.removefile(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp;');
+						actions.push('<a class="btn btn-success btn-xs" href="javascript:;" onclick="showFile(\'' + row.id + '\')"><i class="glyphicon glyphicon-bookmark"></i>文件预览</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+
+			//热力图
+			var name = [];
+			var cou =[];
+			$.ajax({
+				url: prefix + "/updtj",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				async: false,
+				success: function(data) {
+					name = data[0];
+					cou = data[1];
+
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+
+
+			var c6 = echarts.init(document.getElementById("numtj"));
+			option = {
+				title: {
+					text: '',
+					subtext: ''
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data: ['文件数据', 'Evaporation']
+				},
+				toolbox: {
+					show: true,
+					feature: {
+						dataView: { show: true, readOnly: false },
+						magicType: { show: true, type: ['line', 'bar'] },
+						restore: { show: true },
+						saveAsImage: { show: true }
+					}
+				},
+				calculable: true,
+				xAxis: [
+					{
+						type: 'category',
+						// prettier-ignore
+						data: name
+					}
+				],
+				yAxis: [
+					{
+						type: 'value'
+					}
+				],
+				series: [
+					{
+						name: '文件数据',
+						type: 'bar',
+						data: cou,
+						markPoint: {
+							data: [
+								{ type: 'max', name: 'Max' },
+								{ type: 'min', name: 'Min' }
+							]
+						},
+						markLine: {
+							data: [{ type: 'average', name: 'Avg' }]
+						}
+					}
+				]
+			};
+
+			c6.setOption(option);
+			$(window).resize(c6.resize);
+        });
+
+		function resetPre() {
+			resetDate();
+			$("#client-from")[0].reset();
+			$.table.search();
+		}
+		//编码格式设置
+		function base64Encode(str) {
+			return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+				return String.fromCharCode('0x' + p1);
+			}));
+		}
+		//预览
+		function showFile(id){
+			$.modal.confirm("确定预览该" + table.options.modalName + "云端数据吗？", function() {
+				$.ajax({
+					url: prefix + "/showfile",
+					type: 'POST', // 或 'POST' 等其他HTTP方法
+					dataType: 'json', // 期望从服务器返回的数据类型
+					data: {'id':id},
+					async: false,
+					success: function(data) {
+						var url = data.msg; //要预览文件的访问地址
+						window.open('http://8.138.196.22:8012/onlinePreview?url=' + encodeURIComponent(base64Encode(url)));
+					},
+					error: function(xhr, status, error) {
+						// 请求失败，处理错误情况
+						console.error('Error: ' + error);
+					}
+				});
+			});
+
+		}
+		// 自定义下载方法
+		function downloadFile (id){
+			$.modal.confirm("确定下载该" + table.options.modalName + "云端数据吗？", function() {
+				window.location.href  = ctx + "common/download/id?id=" + id;
+			});
+
+		}
+		$(document).ready(function () {
+			// 多图上传
+			$("#multipleFile").fileinput({
+				uploadUrl: prefix + '/upload',
+				uploadAsync: true
+			}).on('filebatchuploadsuccess', function (event, data, previewId, index) {
+				$.table.search();
+			}).on('fileremoved', function (event, id, index) {
+				$("input[name='" + event.currentTarget.id + "']").val('')
+				$.table.search();
+			}).on('fileerror', function (event, id, index) {
+				$.table.search();
+			}).on('filebatchuploaderror', function (event, id, index) {
+				$.table.search();
+			})
+		});
+    </script>
+</body>
+</html>
