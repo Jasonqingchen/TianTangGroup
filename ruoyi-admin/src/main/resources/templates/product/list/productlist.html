@@ -3,14 +3,17 @@
 <head>
 	<th:block th:include="include :: header('表格搜索')" />
 	<th:block th:include="include :: bootstrap-select-css" />
+	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
 	<div class="row">
-	<div class="col-sm-12 search-collapse">
+	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="2s">
 		<form id="client-from">
 			<input type="hidden" id="id" name="id">
-			<div class="select-list">
+			<div class="select-list" >
 				<ul>
 					<li>
 						产品名称：<input type="text" name="productname" id="productname" placeholder="产品名称"/>
@@ -26,6 +29,7 @@
 			</div>
 		</form>
 	</div>
+		<div class="wow bounceInRight"  data-wow-duration="2s">
      	<div class="btn-group-sm" id="toolbar" role="group">
 
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
@@ -47,6 +51,7 @@
 						   data-reorderable-columns="true" class="fixed-table-toolbar"></table>
 			</div>
 		</div>
+	</div>
 	</div>
 </table>
 <!--模态弹框-->
@@ -72,7 +77,9 @@
 </div>
 	<th:block th:include="include :: footer" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
+<script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
+		new WOW().init();
         var prefix = ctx + "product/list";
         $(function() {
             var options = {
