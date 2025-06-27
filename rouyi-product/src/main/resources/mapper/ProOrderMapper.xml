@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.product.mapper.ProOrdertMapper">
+
+	<resultMap type="ProOrderModel" id="ProOrderResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<id column="productname" jdbcType="VARCHAR" property="productname" />
+		<result column="date" jdbcType="VARCHAR" property="date" />
+		<result column="oid" jdbcType="VARCHAR" property="oid" />
+		<result column="bz" jdbcType="VARCHAR" property="bz" />
+		<result column="psize" jdbcType="VARCHAR" property="psize" />
+		<result column="ssxs" jdbcType="VARCHAR" property="ssxs" />
+		<result column="cou" jdbcType="VARCHAR" property="cou" />
+		<result column="price" jdbcType="VARCHAR" property="price" />
+	</resultMap>
+
+	<!--删除-->
+	<delete id="delByOid">
+		delete from proorder as p  where p.oid = #{id}
+	</delete>
+
+	<!--插入-->
+	<insert id="insertProOrder" parameterType="ProOrderModel">
+		insert into proorder(
+		<if test="id != null and id != ''">id,</if>
+		<if test="productname != null and productname != ''">productname,</if>
+		<if test="date != null and date != ''">date,</if>
+		<if test="bz != null and bz != ''">bz,</if>
+		<if test="psize != null and psize != ''">psize,</if>
+		<if test="cou != null and cou != ''">cou,</if>
+		<if test="price != null and price != ''">price,</if>
+		<if test="oid != null and oid != ''">oid,</if>
+		<if test="ssxs != null and ssxs != ''">ssxs</if>
+		)values(
+		<if test="id != null and id != ''">#{id},</if>
+		<if test="productname != null and productname != ''">#{productname},</if>
+		<if test="date != null and date != ''">#{date},</if>
+		<if test="bz != null and bz != ''">#{bz},</if>
+		<if test="psize != null and psize != ''">#{psize},</if>
+		<if test="cou != null and cou != ''">#{cou},</if>
+		<if test="price != null and price != ''">#{price},</if>
+		<if test="oid != null and oid != ''">#{oid},</if>
+		<if test="ssxs != null and ssxs != ''">#{ssxs}</if>
+		)
+	</insert>
+
+</mapper> 

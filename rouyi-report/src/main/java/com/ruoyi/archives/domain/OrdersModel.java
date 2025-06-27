@@ -3,6 +3,9 @@ package com.ruoyi.archives.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.product.domain.ProductModel;
+
+import java.util.List;
 
 public class OrdersModel extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -34,6 +37,20 @@ public class OrdersModel extends BaseEntity {
     private String cou;
 
     private String Years;
+
+
+    /**
+     * 商品信息
+     */
+    private List<ProductModel> goods;
+
+    public List<ProductModel> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(List<ProductModel> goods) {
+        this.goods = goods;
+    }
 
     public String getYears() {
         return Years;
@@ -144,6 +161,9 @@ public class OrdersModel extends BaseEntity {
                 ", Ssxs='" + Ssxs + '\'' +
                 ", Cid='" + Cid + '\'' +
                 ", Receiptnumber='" + Receiptnumber + '\'' +
+                ", cou='" + cou + '\'' +
+                ", Years='" + Years + '\'' +
+                ", goods=" + goods +
                 '}';
     }
 }

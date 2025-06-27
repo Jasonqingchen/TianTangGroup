@@ -19,6 +19,9 @@ import com.ruoyi.archives.mapper.ClientMapper;
 
 import com.ruoyi.archives.mapper.ClientFollowMapper;
 import com.ruoyi.archives.mapper.OrdersMapper;
+import com.ruoyi.product.domain.ProOrderModel;
+import com.ruoyi.product.domain.ProductModel;
+import com.ruoyi.product.mapper.ProOrdertMapper;
 import com.ruoyi.system.service.impl.SysUserServiceImpl;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -60,6 +63,9 @@ public class RptDataController extends BaseController {
 
     @Autowired
     private OrdersMapper oMapper;
+
+    @Autowired
+    private ProOrdertMapper poMapper;
 
 
 
@@ -154,6 +160,25 @@ public class RptDataController extends BaseController {
         oModel.setDate(formatter.format(new Date()));
         oModel.setMonth(month.format(new Date()));
         oModel.setYears(years.format(new Date()));
+        if(oModel.getGoods()==null){
+            return AjaxResult.error("未填写商品 无法下单");
+        } else {
+        //save to new Orderpro table and use order table the id connect
+            ProOrderModel pom = new ProOrderModel();
+            List<ProductModel> goods = oModel.getGoods();
+            goods.forEach(go->{
+                pom.setCou(go.getCou());
+                pom.setId(String.valueOf(Math.random()*999999999));
+                pom.setDate(formatter.format(new Date()));
+                pom.setPrice(go.getPrice());
+                pom.setProductname(go.getProductname());
+                pom.setPsize(go.getPsize());
+                pom.setSsxs(oModel.getSsxs());
+                pom.setOid(oModel.getId());
+                poMapper.insertProOrder(pom);
+            });
+        }
+
         return AjaxResult.success(oMapper.insertOrder(oModel));
     }
     /**

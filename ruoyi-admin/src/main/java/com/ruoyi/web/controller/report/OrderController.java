@@ -10,6 +10,7 @@ import com.ruoyi.archives.domain.ClientModel;
 import com.ruoyi.archives.domain.OrdersModel;
 import com.ruoyi.archives.mapper.ClientMapper;
 import com.ruoyi.archives.mapper.OrdersMapper;
+import com.ruoyi.product.mapper.ProOrdertMapper;
 import com.ruoyi.system.service.impl.SysUserServiceImpl;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -41,6 +42,9 @@ public class OrderController  extends BaseController {
 
     @Autowired
     private ClientMapper cMapper;
+
+    @Autowired
+    private ProOrdertMapper poMapper;
 
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
     private String prefix = "report/orderlist";
@@ -78,6 +82,8 @@ public class OrderController  extends BaseController {
         for (String id : idss)
         {
             oMapper.deleteReportById(id);
+            // Sam time del connect table for oid = id
+            poMapper.delByOid(id);
         }
         return AjaxResult.success();
     }

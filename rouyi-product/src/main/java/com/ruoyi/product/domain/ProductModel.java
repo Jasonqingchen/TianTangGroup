@@ -39,6 +39,16 @@ public class ProductModel extends BaseEntity {
 
     private String Cou;
 
+    private String Price;
+
+    public String getPrice() {
+        return Price;
+    }
+
+    public void setPrice(String price) {
+        Price = price;
+    }
+
     public String getId() {
         return Id;
     }
