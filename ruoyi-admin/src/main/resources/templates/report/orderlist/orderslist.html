@@ -3,6 +3,9 @@
 <head>
 	<th:block th:include="include :: header('表格搜索')" />
 	<th:block th:include="include :: bootstrap-select-css" />
+	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
 <style>
 	@media print {
@@ -22,7 +25,7 @@
 <body class="gray-bg">
 <div class="container-div">
 	<div class="row">
-	<div class="col-sm-12 search-collapse">
+	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="2s">
 		<form id="client-from">
 			<input type="hidden" id="id" name="id">
 			<div class="select-list">
@@ -48,7 +51,7 @@
 			</div>
 		</form>
 	</div>
-     	<div class="btn-group-sm" id="toolbar" role="group">
+     	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="2s" id="toolbar" role="group">
 
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 	            <i class="fa fa-remove"></i> 批量删除
@@ -58,7 +61,7 @@
 			</a>-->
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
         </div>
-			<div class="col-sm-12 select-table table-bordered">
+			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="2s">
 					<table id="bootstrap-table" data-resizable="true"
 						   data-reorderable-columns="true" class="fixed-table-toolbar"></table>
 			</div>
@@ -159,7 +162,9 @@
 </div>
 	<th:block th:include="include :: footer" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
+<script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
+		new WOW().init();
         var prefix = ctx + "report/orderlist";
         var datas = [[${@dict.getType('report_client_status')}]];
 

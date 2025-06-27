@@ -3,16 +3,19 @@
 <head>
 	<th:block th:include="include :: header('数据分析')" />
 	<th:block th:include="include :: bootstrap-select-css" />
+	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
 <body class="gray-bg">
 <div class="row  border-bottom white-bg dashboard-header">
-	<div class="col-sm-12" style="text-align: left">
+	<div class="col-sm-12 wow bounceInLeft"  data-wow-duration="4s"style="text-align: left">
 		<p style="color: #bd2c00;"><strong>提示：通过数据图形化分析可直观的观察客户以及员工的区间状态，使用者能够更好的进行对客户和员工进行分析和及时的改变策略</strong>
 		</p>
 	</div>
 </div><br>
 <div class="row">
-	<div class="col-sm-3">
+	<div class="col-sm-3 wow flipInY"  data-wow-duration="2s">
 		<div class="ibox">
 			<div class="ibox-content" style="background-color: #eae2c0">
 				<h5>今日订单数量</h5>
@@ -20,7 +23,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-3 wow flipInY"  data-wow-duration="2s">
 		<div class="ibox">
 			<div class="ibox-content" style="background-color: #f1c097">
 				<h5>今日收入</h5>
@@ -29,7 +32,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-3 wow flipInY"  data-wow-duration="2s">
 		<div class="ibox">
 			<div class="ibox-content" style="background-color: #90bfef">
 				<h5>本月目前收入</h5>
@@ -37,7 +40,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-3 wow flipInY"  data-wow-duration="2s">
 		<div class="ibox">
 			<div class="ibox-content" style="background-color: #66f3d9">
 				<h5>总收入</h5>
@@ -47,7 +50,7 @@
 	</div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-	<div class="row">
+	<div class="row wow flipInY"  data-wow-duration="2s">
 		<div class="col-sm-6">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
@@ -58,7 +61,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-6 wow flipInY"  data-wow-duration="2s">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>员工订单分析</h5>
@@ -69,7 +72,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row wow flipInY"  data-wow-duration="2s">
 		<div class="col-sm-6">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
@@ -80,7 +83,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-6 wow flipInY"  data-wow-duration="2s">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
 					<h5>客户类型分析</h5>
@@ -92,7 +95,7 @@
 		</div>
 
 	</div>
-	<div class="row">
+	<div class="row wow flipInY"  data-wow-duration="2s">
 		<div class="col-sm-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
@@ -104,7 +107,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row wow flipInY"  data-wow-duration="2s">
 		<div class="col-sm-12">
 			<div class="ibox float-e-margins">
 				<div class="ibox-title">
@@ -125,7 +128,9 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: echarts-js" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
+<script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
+		new WOW().init();
         var prefix = ctx + "report/sjfx";
         $(function() {
 			var options = {
