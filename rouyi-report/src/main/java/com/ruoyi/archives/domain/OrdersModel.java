@@ -36,6 +36,36 @@ public class OrdersModel extends BaseEntity {
 
     private String cou;
 
+    private String price;
+
+    private String psize;
+
+    private String productname;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPsize() {
+        return psize;
+    }
+
+    public void setPsize(String psize) {
+        this.psize = psize;
+    }
+
+    public String getProductname() {
+        return productname;
+    }
+
+    public void setProductname(String productname) {
+        this.productname = productname;
+    }
+
     private String Years;
 
 
