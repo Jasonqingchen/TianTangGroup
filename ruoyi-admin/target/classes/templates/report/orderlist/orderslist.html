@@ -3,11 +3,29 @@
 <head>
 	<th:block th:include="include :: header('表格搜索')" />
 	<th:block th:include="include :: bootstrap-select-css" />
+	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
+<style>
+	@media print {
+		body * {
+			visibility: hidden;
+		}
+		#printArea, #printArea * {
+			visibility: visible;
+		}
+		#printArea {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	}
+</style>
 <body class="gray-bg">
 <div class="container-div">
 	<div class="row">
-	<div class="col-sm-12 search-collapse">
+	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="1s">
 		<form id="client-from">
 			<input type="hidden" id="id" name="id">
 			<div class="select-list">
@@ -33,7 +51,7 @@
 			</div>
 		</form>
 	</div>
-     	<div class="btn-group-sm" id="toolbar" role="group">
+     	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="1s" id="toolbar" role="group">
 
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 	            <i class="fa fa-remove"></i> 批量删除
@@ -43,25 +61,86 @@
 			</a>-->
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
         </div>
-			<div class="col-sm-12 select-table table-bordered">
+			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
 					<table id="bootstrap-table" data-resizable="true"
 						   data-reorderable-columns="true" class="fixed-table-toolbar"></table>
 			</div>
 		</div>
 	</div>
 </table>
+
 <!--模态弹框-->
-<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
+<div class="modal fade" id="printArea" tabindex="-1" role="dialog" aria-hidden="true">
+
+	<div class="modal-dialog modal-fullscreen" style="width: 100%;height: 100%">
 		<div class="wrapper wrapper-content animated fadeInRight">
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="ibox-content p-xl">
-						<strong style="color: #bd2c00">未绑定产品信息 此功能待开发</strong>
-						<!-- 打印网页时通过hidden-print隐藏元素 -->
-						<div class="text-right hidden-print">
-							<button class="btn btn-primary" onclick="printPage()"><i class="fa fa-print"></i> 打印</button>
+						<div style="text-align: center;font-size: 25px;">
+						<strong></strong><br>
 						</div>
+						<div class="wrapper wrapper-content animated fadeInRight">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="ibox-content p-xl">
+										<div class="row">
+											<div class="col-sm-6">
+												<address style="font-size: 15px;">
+													<strong><span><img th:src="@{/img/profile.jpg}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;天唐集团销售订单</strong>
+												</address>
+											</div>
+
+											<div class="col-sm-6 text-right">
+												<h4>单据编号：</h4>
+												<h4 class="text-navy" id="code"></h4>
+												<address>
+													<abbr>客户：<strong id="cus"></strong><br></abbr>
+													<abbr>销售员：<span id="ssxsy"></span></abbr>
+												</address>
+												<p>
+													<span><strong>日期：</strong> <span id="ddate"></span></span>
+												</p>
+											</div>
+										</div>
+
+										<div class="table-responsive m-t">
+											<table class="table invoice-table">
+												<thead>
+												<tr>
+													<th style="width: 50px;">序号</th>
+													<th>清单</th>
+													<th>数量</th>
+													<th>单价</th>
+													<th>型号</th>
+													<th>总价</th>
+												</tr>
+												</thead>
+												<tbody id="vfor">
+												</tbody>
+											</table>
+										</div>
+										<!-- /table-responsive -->
+
+										<table class="table invoice-total">
+											<tbody>
+											<tr>
+												<td><strong>合计：</strong>
+												</td>
+												<td>&yen;<strong><span id="count" style="color: #bd2c00;font-size: 25px;"></span></strong></td>
+											</tr>
+											</tbody>
+										</table>
+										<!-- 打印网页时通过hidden-print隐藏元素 -->
+										<div class="text-right hidden-print">
+												<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+											<button class="btn btn-primary" onclick="printPage()"><i class="fa fa-print"></i>打印</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 
 						<!--<div class="well m-t"><strong>注意：</strong> 请在30日内完成付款，否则订单会自动取消。
 						</div>-->
@@ -73,10 +152,13 @@
 </div>
 	<th:block th:include="include :: footer" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
+<script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
+		new WOW().init();
         var prefix = ctx + "report/orderlist";
         var datas = [[${@dict.getType('report_client_status')}]];
-
+		var modelss = [];
+		var html = [];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -93,6 +175,7 @@
 				rememberSelected: true,
 		        modalName: "客户",
 				showColumns: true,
+				models:[],
                 columns: [{
 		            checkbox: true
 		        },{
@@ -135,14 +218,47 @@
 		            formatter: function(value, row, index) {
 		            	var actions = [];
                         actions.push('<a class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp;&nbsp;&nbsp;');
-						actions.push('<button class="btn btn-xs btn-success" data-target="#myModal" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印订单</button>');
+						actions.push('<button class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印订单</button>');
 						return actions.join('');
 		            }
 		        }]
             };
             $.table.init(options);
         });
-
+		//打印返回数据
+		function printOrder(id){
+			document.getElementById("vfor").innerHTML='';
+			$.ajax({
+				url: prefix + "/back",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				data: {'id':id},
+				async: false,
+				success: function(data) {
+					var count = 0;
+					document.getElementById("ddate").innerText=data.data.Model[0].date;
+					document.getElementById("ssxsy").innerText=data.data.Model[0].ssxs;
+					document.getElementById("code").innerText=data.data.Model[0].receiptnumber;
+					document.getElementById("cus").innerText=data.data.Model[0].name;
+					for (let i = 0; i < data.data.Model.length; i++) {
+						document.getElementById("vfor").innerHTML+="<tr>\n" +
+									"<td style=\"width: 50px;\"><strong>"+(i+1)+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].productname+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].cou+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].price+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].psize+"</strong></td>\n" +
+									"<td><strong style='font-size: 15px;'>"+(data.data.Model[i].price * data.data.Model[i].cou)+"</strong></td>\n" +
+									"</tr><br>";
+						count+=(data.data.Model[i].price * data.data.Model[i].cou);
+					}
+					document.getElementById("count").innerText=count;
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+		}
 		function resetPre() {
 			resetDate();
 			$("#client-from")[0].reset();

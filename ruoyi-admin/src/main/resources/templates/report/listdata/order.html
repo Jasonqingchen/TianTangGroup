@@ -3,6 +3,8 @@
 <head>
 	<th:block th:include="include :: header('客户订单')" />
 	<th:block th:include="include :: datetimepicker-css" />
+	<th:block th:include="include :: select2-css" />
+	<th:block th:include="include :: bootstrap-select-css" />
 </head>
 <body class="white-bg">
 <div class="main-content">
@@ -14,7 +16,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">客户名称：</label>
 					<div class="col-sm-8">
-						<input placeholder="请输入客户名称" class="form-control" type="text" maxlength="30" th:field="*{name}" required>
+						<input placeholder="请输入客户名称" id="name"  class="form-control" type="text" maxlength="30" th:field="*{name}" disabled>
 					</div>
 				</div>
 
@@ -24,9 +26,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">所属销售：</label>
 					<div class="col-sm-8">
-						<select name="ssxs" class="form-control" th:with="type=${@dict.getType('report_client_ssxs')}">
-							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{ssxs}" id="ssxs"></option>
-						</select>
+						<input placeholder="请输入客户名称" id="ssxs"  class="form-control" type="text" maxlength="30" th:field="*{ssxs}" disabled>
 					</div>
 				</div>
 			</div>
@@ -62,7 +62,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<button type="button" class="btn btn-white btn-sm" onclick="addRow()"><i class="fa fa-plus"> 增加</i></button>
-				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRow()"><i class="fa fa-minus"> 删除</i></button>
+				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRows()"><i class="fa fa-minus"> 删除</i></button>
 				<div class="col-sm-12 select-table table-striped">
 					<table id="bootstrap-table"></table>
 				</div>
@@ -70,55 +70,12 @@
 		</div>
 	</form>
 </div>
-	<!--<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-		<form class="form-horizontal m" id="form-client-order" th:object="${cModel}">
-			<input name="id" id="id" type="hidden"  th:field="*{id}" />
-			<div class="form-group">
-				<label class="col-sm-3 control-label">所属销售：</label>
-				<div class="col-sm-8">
-					<div class="input-group" style="width: 100%">
-						<select name="ssxs" id="ssxs" class="form-control m-b" th:with="type=${@dict.getType('report_client_ssxs')}">
-							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{ssxs}"></option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">客户姓名：</label>
-				<div class="col-sm-8">
-					<input class="form-control" type="text" name="balance" id="balance" placeholder="客户姓名" th:field="*{name}"></input>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">发票号：</label>
-				<div class="col-sm-8">
-					<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="发票号" required></input>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">支付金额：</label>
-				<div class="col-sm-8">
-					<input class="form-control" type="text" name="pay" id="pay" placeholder="金额" required></input>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">客户描述：</label>
-				<div class="col-sm-8">
-					<textarea class="form-control" type="text" name="bz" id="bz" placeholder="跟进详情" th:field="*{bz}"></textarea>
-				</div>
-			</div>
-			&lt;!&ndash;<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<button type="button" class="btn btn-sm btn-primary" onclick="submit1()"><i class="fa fa-check"></i>保 存</button>&nbsp;
-				</div>
-			</div>&ndash;&gt;
-		</form>
-	</div>-->
 	<th:block th:include="include :: footer" />
 <th:block th:include="include :: datetimepicker-js" />
 <th:block th:include="include :: bootstrap-suggest-js" />
 <th:block th:include="include :: bootstrap-typeahead-js" />
-<script th:src="@{/js/jquery.tmpl.js}"></script>
+<th:block th:include="include :: select2-js" />
+<th:block th:include="include :: bootstrap-select-js" />
 	<script type="text/javascript">
 		var prefix = ctx + "report/listdata";
 		var plist = ctx + "product/list";
@@ -151,7 +108,8 @@
 						align: 'center',
 						title: '商品名称',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
+							//var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
+							var html = $.common.sprintf("<select class='form-control goodsName'  name='goods[%s].productname' value='%s' required></select>", index, value);
 							return html;
 						}
 					},
@@ -160,7 +118,7 @@
 						align: 'center',
 						title: '商品单价',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control' goodsName type='text' name='goods[%s].price' value='%s'>", index, value);
+							var html = $.common.sprintf("<input class='form-control goodsName'  type='text' name='goods[%s].price' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -169,7 +127,7 @@
 						align: 'center',
 						title: '尺寸',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].psize' value='%s'>", index, value);
+							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].psize' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -178,7 +136,7 @@
 						align: 'center',
 						title: '数量',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].cou' value='%s'>", index, value);
+							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].cou' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -187,17 +145,25 @@
 						align: 'center',
 						formatter: function(value, row, index) {
 							var value = $.common.isNotEmpty(row.index) ? row.index : $.table.serialNumber(index);
-							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delRowByIndex(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
+							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delrow(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
 						}
 					}]
 			};
 			$.table.init(options);
 		});
-
-
 		/* 主子表-提交 */
 		function submitHandler(index, layero){
 			if ($.validate.form()) {
+				$("#ssxs").each(function() {
+					if (parseInt($(this).val()) != -1) {
+						$(this).attr("disabled", false);
+					}
+				});
+				$("#name").each(function() {
+					if (parseInt($(this).val()) != -1) {
+						$(this).attr("disabled", false);
+					}
+				});
 				var data = $("#form-add").serializeArray();
 				$.operate.save(prefix + "/order", data);
 			}
@@ -232,36 +198,18 @@
 				cou: "",
 			}
 			sub.addRow(row);
-		}
-
-		function submit1(){
-			$.ajax({
-				url: prefix + "/order",
-				data: $('#form-client-order').serialize(),
-				type: "post",
-				success: function(result) {
-					if (result.code == web_status.SUCCESS) {
-						layer.msg("保存成功,正在刷新数据请稍候……", {
-							icon: 1,
-							time: 500,
-							shade: [0.1, '#8F8F8F']
-						},function() {
-							location.reload();
+			//查询商品信息
+			fetch(plist + '/productsellist')
+					.then(response => response.json())
+					.then(data => {
+						var optionss = '';
+						data.forEach(item => {
+							$(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
 						});
-						$.modal.close();
-						$.modal.msgSuccess("下单成功，请到订单订单列表中查看");
-					} else {
-						alert(result.msg);
-					}
-				}
-			})
+
+					}).catch(error => console.error('Error:', error));
 		}
 
 	</script>
-<!-- 商品类型 -->
-<script id="goodsTypeTpl" type="text/x-jquery-tmpl">
-
-
-</script>
 </body>
 </html>

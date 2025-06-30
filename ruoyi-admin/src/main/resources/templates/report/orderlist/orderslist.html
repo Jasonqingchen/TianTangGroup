@@ -96,7 +96,7 @@
 												<h4 class="text-navy" id="code"></h4>
 												<address>
 													<abbr>客户：<strong id="cus"></strong><br></abbr>
-													<abbr>销售员：<span>Jason</span></abbr>
+													<abbr>销售员：<span id="ssxsy"></span></abbr>
 												</address>
 												<p>
 													<span><strong>日期：</strong> <span id="ddate"></span></span>
@@ -237,7 +237,7 @@
 				success: function(data) {
 					var count = 0;
 					document.getElementById("ddate").innerText=data.data.Model[0].date;
-					document.getElementById("ssxs").innerText=data.data.Model[0].ssxs;
+					document.getElementById("ssxsy").innerText=data.data.Model[0].ssxs;
 					document.getElementById("code").innerText=data.data.Model[0].receiptnumber;
 					document.getElementById("cus").innerText=data.data.Model[0].name;
 					for (let i = 0; i < data.data.Model.length; i++) {

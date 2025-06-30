@@ -3,11 +3,14 @@
 <head>
 	<th:block th:include="include :: header('文件上传')" />
 	<th:block th:include="include :: bootstrap-fileinput-css" />
+	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
+	<!-- 引入样式 -->
+	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-sm-8 wow bounceInLeft"  data-wow-duration="1s">
 			<div class="ibox float-e-margins">
 				<div class="ibox-content">
 					<div class="form-group">
@@ -20,13 +23,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-4" style="height: 100%">
+		<div class="col-sm-4 wow flipInY"  data-wow-duration="1s" style="height: 100%">
 			<div class="echarts" id="numtj" ></div>
 		</div>
 	</div>
 
 </div>
-<div class="container-div">
+<div class="container-div wow flipInY"  data-wow-duration="1s">
 	<div class="row">
 	<div class="col-sm-12 search-collapse">
 		<form id="client-from">
@@ -66,7 +69,9 @@
 <th:block th:include="include :: echarts-js" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
 <th:block th:include="include :: bootstrap-fileinput-js" />
+<script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
+		new WOW().init();
         var prefix = ctx + "archives/listdata";
         $(function() {
             var options = {

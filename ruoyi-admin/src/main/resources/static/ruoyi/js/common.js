@@ -505,6 +505,47 @@ var sub = {
         $("#" + currentId).bootstrapTable('remove', { field: "index", values: [value] });
         sub.editRow();
     },
+    /*开始*/
+    /*这里是解决删除清除回显数据问题的方式 需自定义方法*/
+    delRows: function(column) {
+        sub.editRow();
+        var subColumn = $.common.isEmpty(column) ? "index" : column;
+        var ids = $.table.selectColumns(subColumn);
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $("#" + table.options.id).bootstrapTable('remove', { field: subColumn, values: ids });
+        fetch(plist + '/productsellist')
+            .then(response => response.json())
+            .then(data => {
+                var optionss = '';
+                data.forEach(item => {
+                    //$(".form-control1").append('<option value="${item.productname}">${item.productname}</option>');
+                    $(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
+                });
+                //document.getElementById(ccout).innerHTML = optionss;
+
+            }).catch(error => console.error('Error:', error));
+    },
+    delrow(value, tableId){
+        var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
+        $("#" + currentId).bootstrapTable('remove', { field: "index", values: [value] });
+        fetch(plist + '/productsellist')
+            .then(response => response.json())
+            .then(data => {
+                var optionss = '';
+                data.forEach(item => {
+                    //$(".form-control1").append('<option value="${item.productname}">${item.productname}</option>');
+                    $(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
+                });
+                //document.getElementById(ccout).innerHTML = optionss;
+
+            }).catch(error => console.error('Error:', error));
+    },
+
+
+    /*结束*/
     addRow: function(row, tableId) {
     	var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
     	table.set(currentId);

@@ -28,7 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 import static com.ruoyi.archives.util.FileUploadUtils.removeFile;
 import static com.ruoyi.common.utils.PageUtils.startPage;
@@ -74,6 +74,26 @@ public class ProductController  extends BaseController {
         startPage();
         return getDataTable(proMapper.selectAll(proModel));
     }
+
+    /**
+     * return select data
+     */
+    @GetMapping("/productsellist")
+    @ResponseBody
+    public List productsellist(ProductModel proModel)
+    {
+        List<Map<String,String>> list = new ArrayList();
+        List<ProductModel> productModels = proMapper.selectAll(null);
+        productModels.forEach(pro->{
+            Map map = new HashMap();
+            map.put("value",pro.getId());
+            map.put("productname",pro.getProductname());
+            list.add(map);
+        });
+        return list;
+    }
+
+
 
     /**
      * delete product
