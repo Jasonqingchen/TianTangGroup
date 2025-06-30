@@ -17,6 +17,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="years" jdbcType="VARCHAR" property="years" />
 	</resultMap>
+
+	<!--打印回显数据-->
+	<select id="selectCusAndProById" resultMap="OrderResult">
+		select o.*,p.* from orders as o INNER JOIN proorder as p ON o.id = p.oid where o.id = #{id}
+	</select>
+
 	<!--验证用户名下是否存在订单-->
 	<select id="selectOrderByCid" resultType="java.lang.Integer">
 		select count(1) from orders where 1=1

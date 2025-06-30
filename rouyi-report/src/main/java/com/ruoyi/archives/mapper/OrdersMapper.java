@@ -5,6 +5,7 @@ import com.ruoyi.archives.domain.OrdersModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrdersMapper
@@ -69,5 +70,11 @@ public interface OrdersMapper
      * @return
      */
     Integer selectOrderByCid(String id);
+
+
+    /**
+     * 回显订单数据
+     */
+    List<OrdersModel> selectCusAndProById(String id);
 
 }

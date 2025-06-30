@@ -19,13 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +87,27 @@ public class OrderController  extends BaseController {
         }
         return AjaxResult.success();
     }
+
+    /**
+     * 打印回显数据
+     */
+    @PostMapping("/back")
+    @ResponseBody
+    public AjaxResult back(String id, ModelMap mmap)
+    {
+        mmap.put("Model", oMapper.selectCusAndProById(id));
+        return AjaxResult.success(mmap);
+    }
+   /* @GetMapping("/back/{id}")
+    public String back(@PathVariable("id") String id, ModelMap mmap)
+    {
+        mmap.put("Model", oMapper.selectCusAndProById(id));
+        List list = new ArrayList();
+        oMapper.selectCusAndProById(id).forEach(ff->{
+            list.add(ff);
+        });
+        return  prefix + "/orderslist";
+    }*/
 
     /**
      * 导入订单数据
