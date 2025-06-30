@@ -25,7 +25,7 @@
 <body class="gray-bg">
 <div class="container-div">
 	<div class="row">
-	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="2s">
+	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="1s">
 		<form id="client-from">
 			<input type="hidden" id="id" name="id">
 			<div class="select-list">
@@ -51,7 +51,7 @@
 			</div>
 		</form>
 	</div>
-     	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="2s" id="toolbar" role="group">
+     	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="1s" id="toolbar" role="group">
 
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 	            <i class="fa fa-remove"></i> 批量删除
@@ -61,7 +61,7 @@
 			</a>-->
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
         </div>
-			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="2s">
+			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
 					<table id="bootstrap-table" data-resizable="true"
 						   data-reorderable-columns="true" class="fixed-table-toolbar"></table>
 			</div>
@@ -78,7 +78,7 @@
 				<div class="col-sm-12">
 					<div class="ibox-content p-xl">
 						<div style="text-align: center;font-size: 25px;">
-						<strong>天唐集团销售订单</strong><br>
+						<strong></strong><br>
 						</div>
 						<div class="wrapper wrapper-content animated fadeInRight">
 							<div class="row">
@@ -86,7 +86,8 @@
 									<div class="ibox-content p-xl">
 										<div class="row">
 											<div class="col-sm-6">
-												<address>
+												<address style="font-size: 15px;">
+													<strong><span><img th:src="@{/img/profile.jpg}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;天唐集团销售订单</strong>
 												</address>
 											</div>
 
@@ -107,7 +108,7 @@
 											<table class="table invoice-table">
 												<thead>
 												<tr>
-													<th>序号</th>
+													<th style="width: 50px;">序号</th>
 													<th>清单</th>
 													<th>数量</th>
 													<th>单价</th>
@@ -126,7 +127,7 @@
 											<tr>
 												<td><strong>合计：</strong>
 												</td>
-												<td>&yen;<span id="count">0:00</span></td>
+												<td>&yen;<strong><span id="count" style="color: #bd2c00;font-size: 25px;"></span></strong></td>
 											</tr>
 											</tbody>
 										</table>
@@ -241,12 +242,12 @@
 					document.getElementById("cus").innerText=data.data.Model[0].name;
 					for (let i = 0; i < data.data.Model.length; i++) {
 						document.getElementById("vfor").innerHTML+="<tr>\n" +
-									"<td>"+(i+1)+"</td>\n" +
-									"<td>"+data.data.Model[i].productname+"</td>\n" +
-									"<td>"+data.data.Model[i].cou+"</td>\n" +
-									"<td>"+data.data.Model[i].price+"</td>\n" +
-									"<td>"+data.data.Model[i].psize+"</td>\n" +
-									"<td>"+(data.data.Model[i].price * data.data.Model[i].cou)+"</td>\n" +
+									"<td style=\"width: 50px;\"><strong>"+(i+1)+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].productname+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].cou+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].price+"</strong></td>\n" +
+									"<td><strong>"+data.data.Model[i].psize+"</strong></td>\n" +
+									"<td><strong style='font-size: 15px;'>"+(data.data.Model[i].price * data.data.Model[i].cou)+"</strong></td>\n" +
 									"</tr><br>";
 						count+=(data.data.Model[i].price * data.data.Model[i].cou);
 					}
