@@ -82,13 +82,10 @@ public class ProductController  extends BaseController {
     @ResponseBody
     public List productsellist(ProductModel proModel)
     {
-        List<Map<String,String>> list = new ArrayList();
+        List list = new ArrayList();
         List<ProductModel> productModels = proMapper.selectAll(null);
         productModels.forEach(pro->{
-            Map map = new HashMap();
-            map.put("value",pro.getId());
-            map.put("productname",pro.getProductname());
-            list.add(map);
+            list.add(pro.getProductname().toString()+"型号："+pro.getPsize());
         });
         return list;
     }
