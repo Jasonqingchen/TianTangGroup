@@ -77,4 +77,17 @@ public interface OrdersMapper
      */
     List<OrdersModel> selectCusAndProById(String id);
 
+    /**
+     * select OrderList By id
+     * @param id
+     * @return
+     */
+    OrdersModel selectOrderById(String id);
+
+    /**
+     * 修改状态
+     * @param oModel
+     * @return
+     */
+    Integer updateOrder(OrdersModel oModel);
 }

@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -160,6 +161,7 @@ public class RptDataController extends BaseController {
         oModel.setDate(formatter.format(new Date()));
         oModel.setMonth(month.format(new Date()));
         oModel.setYears(years.format(new Date()));
+        oModel.setStatus("未审核");
         if(oModel.getGoods()==null){
             return AjaxResult.error("未填写商品 无法下单");
         } else {

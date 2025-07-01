@@ -34,6 +34,10 @@ public class OrdersModel extends BaseEntity {
     @Excel(name = "发票号")
     private String Receiptnumber;
 
+    @Excel(name = "审核状态")
+    private String Status;
+
+
     private String cou;
 
     private String price;
@@ -41,6 +45,15 @@ public class OrdersModel extends BaseEntity {
     private String psize;
 
     private String productname;
+
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
 
     public String getPrice() {
         return price;
@@ -191,7 +204,11 @@ public class OrdersModel extends BaseEntity {
                 ", Ssxs='" + Ssxs + '\'' +
                 ", Cid='" + Cid + '\'' +
                 ", Receiptnumber='" + Receiptnumber + '\'' +
+                ", Status='" + Status + '\'' +
                 ", cou='" + cou + '\'' +
+                ", price='" + price + '\'' +
+                ", psize='" + psize + '\'' +
+                ", productname='" + productname + '\'' +
                 ", Years='" + Years + '\'' +
                 ", goods=" + goods +
                 '}';

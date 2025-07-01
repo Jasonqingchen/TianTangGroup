@@ -81,9 +81,34 @@ public class OrderController  extends BaseController {
         String [] idss = Convert.toStrArray(ids);
         for (String id : idss)
         {
+            OrdersModel ordersModel = oMapper.selectOrderById(id);
+            if(ordersModel.getStatus().equals("已审核")){
+                return  AjaxResult.error("该订单已审核无法删除");
+            }
             oMapper.deleteReportById(id);
             // Sam time del connect table for oid = id
             poMapper.delByOid(id);
+        }
+        return AjaxResult.success();
+    }
+
+    /**
+     * 审核下推订单
+     */
+    @PostMapping("/conform")
+    @ResponseBody
+    public AjaxResult conform(String ids)
+    {
+        String [] idss = Convert.toStrArray(ids);
+        for (String id : idss)
+        {
+            OrdersModel ordersModel = oMapper.selectOrderById(id);
+            if(ordersModel.getStatus().equals("已审核")){
+                return  AjaxResult.error("该订单已审核，请勿重复审核");
+            }
+           OrdersModel om = oMapper.selectOrderById(id);
+            om.setStatus("已审核");
+            oMapper.updateOrder(om);
         }
         return AjaxResult.success();
     }
