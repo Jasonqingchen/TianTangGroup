@@ -28,27 +28,20 @@
 	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="1s">
 		<form id="client-from">
 			<input type="hidden" id="id" name="id">
-			<div class="select-list">
+			<div class="select-list" >
 				<ul>
 					<li>
-						客户：<input type="text" name="name" id="name" placeholder="客户姓名"/>
+						客户名称：<input type="text" name="name" id="name" placeholder="客户名称"/>
 					</li>
 					<li>
-						支付月份：<input type="text" name="month" id="month" placeholder="yyyy-MM"/>
+						产品编号：<input type="text" name="ssxs" id="ssxs" placeholder="所属销售"/>
 					</li>
 					<li>
-						销售：<input type="text" name="ssxs" id="ssxs" placeholder="所属销售"/>
-					</li>
-					<li>
-						<select name="status" id="status" class="form-control m-b" th:with="type=${@dict.getType('report_order_status')}">
+						<select name="outstatus" id="outstatus" class="form-control m-b" th:with="type=${@dict.getType('product_out_status')}">
 							<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 						</select>
 					</li>
 					<li>
-						<input type="date" class="form-control" name="date" id="date" placeholder="yyyy-MM-dd"/>
-					</li>
-					<li>
-
 						<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 						<a class="btn btn-warning btn-rounded btn-sm" onclick="resetPre()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 					</li>
@@ -56,24 +49,56 @@
 			</div>
 		</form>
 	</div>
-     	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="1s" id="toolbar" role="group">
+		<div class="wow bounceInRight"  data-wow-duration="1s">
+     	<div class="btn-group-sm" id="toolbar" role="group">
 
-	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
-	            <i class="fa fa-remove"></i> 批量删除
+	        <a class="btn btn-danger multiple disabled" onclick="$.operate.fconform()">
+	            <i class="fa fa-remove"></i> 反审核
 	        </a>
-			<a class="btn btn-info multiple disabled" onclick="$.operate.conform()">
-				<i class="filter"></i> 审核下推
+			<a class="btn btn-primary multiple disabled" onclick="$.operate.conformout()">
+				<i class="fa fa-edit"></i> 确认审核并出库
+			</a>
+			<!--<a class="btn btn-success" onclick="$.operate.add()">
+				<i class="fa fa-plus"></i> 新增
+			</a>
+			<a class="btn btn-primary single disabled" onclick="$.operate.edit()">
+				<i class="fa fa-edit"></i> 修改
 			</a>
 
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
+			<a class="btn btn-info" onclick="$.table.importExcel()">
+				<i class="fa fa-upload"></i> 导入
+			</a>-->
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：填写销售订单的时候，若没有产品下拉选项，请先添加产品信息</strong></span>
         </div>
-			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
+			<div class="col-sm-12 select-table table-bordered">
 					<table id="bootstrap-table" data-resizable="true"
 						   data-reorderable-columns="true" class="fixed-table-toolbar"></table>
 			</div>
 		</div>
 	</div>
+	</div>
 </table>
+<!--模态弹框-->
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="ibox-content p-xl">
+						<strong style="color: #bd2c00">未绑定产品信息 此功能待开发</strong>
+						<!-- 打印网页时通过hidden-print隐藏元素 -->
+						<div class="text-right hidden-print">
+							<button class="btn btn-primary" onclick="printPage()"><i class="fa fa-print"></i> 打印</button>
+						</div>
+
+						<!--<div class="well m-t"><strong>注意：</strong> 请在30日内完成付款，否则订单会自动取消。
+						</div>-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <!--模态弹框-->
 <div class="modal fade" id="printArea" tabindex="-1" role="dialog" aria-hidden="true">
@@ -84,7 +109,7 @@
 				<div class="col-sm-12">
 					<div class="ibox-content p-xl">
 						<div style="text-align: center;font-size: 25px;">
-						<strong></strong><br>
+							<strong></strong><br>
 						</div>
 						<div class="wrapper wrapper-content animated fadeInRight">
 							<div class="row">
@@ -93,7 +118,7 @@
 										<div class="row">
 											<div class="col-sm-6">
 												<address style="font-size: 15px;">
-													<strong><span><img th:src="@{/img/profile.jpg}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;天唐集团销售订单</strong>
+													<strong><span><img th:src="@{/img/profile.jpg}"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;天唐集团出库单</strong>
 												</address>
 											</div>
 
@@ -105,10 +130,10 @@
 													<abbr>销售员：<span id="ssxsy"></span></abbr>
 												</address>
 												<p>
-													<span><strong>日期：</strong> <span id="ddate"></span></span>
+													<span><strong>订单日期：</strong> <span id="ddate"></span></span>
 												</p>
 												<p>
-													<span><strong>打印日期：</strong> <span id="dydate"></span></span>
+													<span><strong>出库日期：</strong> <span id="dqdate"></span></span>
 												</p>
 											</div>
 										</div>
@@ -142,7 +167,7 @@
 										</table>
 										<!-- 打印网页时通过hidden-print隐藏元素 -->
 										<div class="text-right hidden-print">
-												<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+											<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
 											<button class="btn btn-primary" onclick="printPage()"><i class="fa fa-print"></i>打印</button>
 										</div>
 									</div>
@@ -163,33 +188,33 @@
 <th:block th:include="include :: bootstrap-table-resizable-js" />
 <script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
-		new WOW().init();
-        var prefix = ctx + "report/orderlist";
-        var datas = [[${@dict.getType('report_order_status')}]];
+		var datas = [[${@dict.getType('report_order_status')}]];
 		var dataout = [[${@dict.getType('product_out_status')}]];
-		var modelss = [];
-		var html = [];
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                removeUrl: prefix + "/remove",
-				confirmorder: prefix + "/conform",
-                exportUrl: prefix + "/export",
-                importUrl: prefix + "/importData",
-                importTemplateUrl: prefix + "/importTemplate",
-		        showSearch: false,
-		        showRefresh: false,
-		        showToggle: false,
-		        showColumns: false,
-		        search: false,
+		new WOW().init();
+		var prefix = ctx + "product/out";
+		var outprefix = ctx + "report/orderlist";
+		$(function() {
+			var options = {
+				url: prefix + "/list",
+				createUrl: prefix + "/add",
+				removeUrl: prefix + "/remove",
+				confirmoutorder: prefix + "/conform",
+				fconfirmoutorder: prefix + "/fconform",
+				exportUrl: prefix + "/export",
+				importUrl: prefix + "/importData",
+				importTemplateUrl: prefix + "/importTemplate",
+				showSearch: false,
+				showRefresh: false,
+				showToggle: false,
+				showColumns: false,
+				search: false,
 				rememberSelected: true,
-		        modalName: "客户",
+				modalName: "客户",
 				showColumns: true,
 				models:[],
-                columns: [{
-		            checkbox: true
-		        },{
+				columns: [{
+					checkbox: true
+				},{
 					field : 'id',
 					title : '客户 ID',
 					visible:false
@@ -198,20 +223,20 @@
 					title : '所属销售',
 					width:80,
 				},
-				{
-					field : 'name',
-					title : '客户姓名',
-					width:200,
-				},
+					{
+						field : 'name',
+						title : '客户姓名',
+						width:200,
+					},
 					{
 						field : 'pay',
 						title : '支付金额',
 						width:30,
 					},{
-					field : 'receiptnumber',
-					title : '发票编号',
+						field : 'receiptnumber',
+						title : '发票编号',
 						width:100,
-				},{
+					},{
 						field : 'month',
 						title : '支付月份',
 						width:100,
@@ -219,51 +244,43 @@
 						field : 'date',
 						title : '支付时间',
 						width:100,
+					},{
+						field : 'outstatus',
+						title : '出库审核状态',formatter: function(value, row, index) {
+							return $.table.selectDictLabel(dataout, value);
+						},
+						width:30,
 					},
 					{
 						field : 'status',
 						title : '订单审核状态',formatter: function(value, row, index) {
 							return $.table.selectDictLabel(datas, value);
 						},
-						width:25,
-					},
-					{
-						field : 'outstatus',
-						title : '出库审核状态',formatter: function(value, row, index) {
-							return $.table.selectDictLabel(dataout, value);
-						},
-						width:25,
+						width:30,
 					},{
 						field : 'bz',
 						title : '备注',
 					},{
-		            title: '操作',
-		            align: 'center',
-					width:200,
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-						if(row.status == '已审核'){
-							actions.push('<button disabled class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</button>&nbsp;&nbsp;&nbsp;');
-						} else {
-							actions.push('<button class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</button>&nbsp;&nbsp;&nbsp;');
+						title: '操作',
+						align: 'center',
+						width:300,
+						formatter: function(value, row, index) {
+							var actions = [];
+							if(row.outstatus == '已审核'){
+								actions.push('<button  class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印出库单</button>');
+							} else {
+								actions.push('<button  disabled class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印出库单</button>');
+							}
+							return actions.join('');
 						}
-
-						if(row.status == '已审核'){
-							actions.push('<button  class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印订单</button>');
-						} else {
-							actions.push('<button  disabled class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印订单</button>');
-						}
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-		//打印返回数据
+					}]
+			};
+			$.table.init(options);
+		});
 		function printOrder(id){
 			document.getElementById("vfor").innerHTML='';
 			$.ajax({
-				url: prefix + "/back",
+				url: outprefix + "/back",
 				type: 'POST', // 或 'POST' 等其他HTTP方法
 				dataType: 'json', // 期望从服务器返回的数据类型
 				data: {'id':id},
@@ -274,16 +291,17 @@
 					document.getElementById("ssxsy").innerText=data.data.Model[0].ssxs;
 					document.getElementById("code").innerText=data.data.Model[0].receiptnumber;
 					document.getElementById("cus").innerText=data.data.Model[0].name;
-					document.getElementById("dydate").innerText=new Date();
+					document.getElementById("dqdate").innerText=new Date();
+
 					for (let i = 0; i < data.data.Model.length; i++) {
 						document.getElementById("vfor").innerHTML+="<tr>\n" +
-									"<td style=\"width: 50px;\"><strong>"+(i+1)+"</strong></td>\n" +
-									"<td><strong>"+data.data.Model[i].productname+"</strong></td>\n" +
-									"<td><strong>"+data.data.Model[i].cou+"</strong></td>\n" +
-									"<td><strong>"+data.data.Model[i].price+"</strong></td>\n" +
-									"<td><strong>"+data.data.Model[i].psize+"</strong></td>\n" +
-									"<td><strong style='font-size: 15px;'>"+(data.data.Model[i].price * data.data.Model[i].cou)+"</strong></td>\n" +
-									"</tr><br>";
+								"<td style=\"width: 50px;\"><strong>"+(i+1)+"</strong></td>\n" +
+								"<td><strong>"+data.data.Model[i].productname+"</strong></td>\n" +
+								"<td><strong>"+data.data.Model[i].cou+"</strong></td>\n" +
+								"<td><strong>"+data.data.Model[i].price+"</strong></td>\n" +
+								"<td><strong>"+data.data.Model[i].psize+"</strong></td>\n" +
+								"<td><strong style='font-size: 15px;'>"+(data.data.Model[i].price * data.data.Model[i].cou)+"</strong></td>\n" +
+								"</tr><br>";
 						count+=(data.data.Model[i].price * data.data.Model[i].cou);
 					}
 					document.getElementById("count").innerText=count;

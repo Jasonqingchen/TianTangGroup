@@ -37,6 +37,9 @@ public class OrdersModel extends BaseEntity {
     @Excel(name = "审核状态")
     private String Status;
 
+    @Excel(name = "是否审核出库")
+    private String Outstatus;
+
 
     private String cou;
 
@@ -46,6 +49,13 @@ public class OrdersModel extends BaseEntity {
 
     private String productname;
 
+    public String getOutstatus() {
+        return Outstatus;
+    }
+
+    public void setOutstatus(String outstatus) {
+        Outstatus = outstatus;
+    }
 
     public String getStatus() {
         return Status;
@@ -205,6 +215,7 @@ public class OrdersModel extends BaseEntity {
                 ", Cid='" + Cid + '\'' +
                 ", Receiptnumber='" + Receiptnumber + '\'' +
                 ", Status='" + Status + '\'' +
+                ", Outstatus='" + Outstatus + '\'' +
                 ", cou='" + cou + '\'' +
                 ", price='" + price + '\'' +
                 ", psize='" + psize + '\'' +

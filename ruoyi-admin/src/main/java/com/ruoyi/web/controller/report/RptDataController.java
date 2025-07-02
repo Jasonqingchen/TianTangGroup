@@ -162,6 +162,7 @@ public class RptDataController extends BaseController {
         oModel.setMonth(month.format(new Date()));
         oModel.setYears(years.format(new Date()));
         oModel.setStatus("未审核");
+        oModel.setOutstatus("未审核");
         if(oModel.getGoods()==null){
             return AjaxResult.error("未填写商品 无法下单");
         } else {

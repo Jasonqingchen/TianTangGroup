@@ -90,4 +90,10 @@ public interface OrdersMapper
      * @return
      */
     Integer updateOrder(OrdersModel oModel);
+
+    /**
+     * just search status eq 已审核 the list
+     * @return
+     */
+    List<OrdersModel> selectAllByStatus(OrdersModel oModel);
 }

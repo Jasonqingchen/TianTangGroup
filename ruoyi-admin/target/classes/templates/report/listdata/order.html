@@ -109,7 +109,7 @@
 						title: '商品名称',
 						formatter: function(value, row, index) {
 							//var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
-							var html = $.common.sprintf("<select class='form-control goodsName'  name='goods[%s].productname' value='%s' required></select>", index, value);
+							var html = $.common.sprintf("<input type='text' placeholder='输入产品' class='form-control goodsName' name='goods[%s].productname' value='%s' clearable required>", index, value);
 							return html;
 						}
 					},
@@ -197,9 +197,15 @@
 				psize: "",
 				cou: "",
 			}
+
+			$.get(plist + '/productsellist', function(data){
+				$(".form-control").typeahead({
+					source: data
+				});
+			},'json');
 			sub.addRow(row);
 			//查询商品信息
-			fetch(plist + '/productsellist')
+			/*fetch(plist + '/productsellist')
 					.then(response => response.json())
 					.then(data => {
 						var optionss = '';
@@ -207,8 +213,11 @@
 							$(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
 						});
 
-					}).catch(error => console.error('Error:', error));
+					}).catch(error => console.error('Error:', error));*/
+
 		}
+
+
 
 	</script>
 </body>

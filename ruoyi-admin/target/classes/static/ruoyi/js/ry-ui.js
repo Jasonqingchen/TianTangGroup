@@ -1164,6 +1164,50 @@ var table = {
                     window.location.href  = ctx + "common/download/id?id=" + rows;
                 });
             },
+            // 审核与批量审核
+            conform: function() {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确定审核该条订单数据吗?", function() {
+                    var url = table.options.confirmorder;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
+            //审核出库
+            conformout: function() {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确定审核该条出库单数据吗?", function() {
+                    var url = table.options.confirmoutorder;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
+
+            //反审核出库
+            fconform: function() {
+                table.set();
+                var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确定反审核该条出库单数据吗?", function() {
+                    var url = table.options.fconfirmoutorder;
+                    var data = { "ids": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
+
             // 批量删除信息
             removeAll: function() {
                 table.set();

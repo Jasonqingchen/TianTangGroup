@@ -64,7 +64,7 @@
 			<a class="btn btn-info multiple disabled" onclick="$.operate.conform()">
 				<i class="filter"></i> 审核下推
 			</a>
-			
+
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
         </div>
 			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
@@ -106,6 +106,9 @@
 												</address>
 												<p>
 													<span><strong>日期：</strong> <span id="ddate"></span></span>
+												</p>
+												<p>
+													<span><strong>打印日期：</strong> <span id="dydate"></span></span>
 												</p>
 											</div>
 										</div>
@@ -163,6 +166,7 @@
 		new WOW().init();
         var prefix = ctx + "report/orderlist";
         var datas = [[${@dict.getType('report_order_status')}]];
+		var dataout = [[${@dict.getType('product_out_status')}]];
 		var modelss = [];
 		var html = [];
         $(function() {
@@ -218,13 +222,20 @@
 					},
 					{
 						field : 'status',
-						title : '审核状态',formatter: function(value, row, index) {
+						title : '订单审核状态',formatter: function(value, row, index) {
 							return $.table.selectDictLabel(datas, value);
 						},
-						width:30,
+						width:25,
+					},
+					{
+						field : 'outstatus',
+						title : '出库审核状态',formatter: function(value, row, index) {
+							return $.table.selectDictLabel(dataout, value);
+						},
+						width:25,
 					},{
 						field : 'bz',
-						title : '支付详情',
+						title : '备注',
 					},{
 		            title: '操作',
 		            align: 'center',
@@ -263,6 +274,7 @@
 					document.getElementById("ssxsy").innerText=data.data.Model[0].ssxs;
 					document.getElementById("code").innerText=data.data.Model[0].receiptnumber;
 					document.getElementById("cus").innerText=data.data.Model[0].name;
+					document.getElementById("dydate").innerText=new Date();
 					for (let i = 0; i < data.data.Model.length; i++) {
 						document.getElementById("vfor").innerHTML+="<tr>\n" +
 									"<td style=\"width: 50px;\"><strong>"+(i+1)+"</strong></td>\n" +

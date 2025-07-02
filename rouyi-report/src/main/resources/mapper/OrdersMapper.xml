@@ -17,7 +17,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="status" jdbcType="VARCHAR" property="status" />
 		<result column="years" jdbcType="VARCHAR" property="years" />
+		<result column="outstatus" jdbcType="VARCHAR" property="outstatus" />
 	</resultMap>
+	<!-- 只查询审核状态为已审核的数据-->
+	<select id="selectAllByStatus" resultMap="OrderResult">
+		select * from orders as o where 1=1
+		<if test="ssxs != null and ssxs != ''">
+			AND o.ssxs like concat('%', #{ssxs}, '%')
+		</if>
+		<if test="name != null and name != ''">
+			AND o.name like concat('%', #{name}, '%')
+		</if>
+		<if test="month != null and month != ''">
+			AND o.month like concat('%', #{month}, '%')
+		</if>
+		<if test="date != null and date != ''">
+			AND o.date = #{date}
+		</if>
+		<if test="receiptnumber != null and receiptnumber != ''">
+			AND c.receiptnumber like concat('%', #{receiptnumber}, '%')
+		</if>
+		<if test="status != null and status != '' and status!='所有'">
+			AND o.status = #{status}
+		</if>
+		<if test="outstatus != null and outstatus != '' and outstatus!='所有'">
+			AND o.outstatus = #{outstatus}
+		</if>
+	</select>
+
 	<!--修改订单状态信息-->
 	<update id="updateOrder" parameterType="OrdersModel">
 		update orders
@@ -34,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="name != null and name != ''">name = #{name},</if>
 			<if test="status != null and status != ''">status = #{status},</if>
 			<if test="years != null and years != ''">years = #{years},</if>
+			<if test="outstatus != null and outstatus != ''">outstatus = #{outstatus}</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -148,6 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="month != null and month != ''">month,</if>
 		<if test="cid != null and cid != ''">cid,</if>
 		<if test="status != null and status != ''">status,</if>
+		<if test="outstatus != null and outstatus != ''">outstatus,</if>
 		<if test="years != null and years != ''">years</if>
 		)values(
 		<if test="id != null and id != ''">#{id},</if>
@@ -161,6 +190,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="month != null and month != ''">#{month},</if>
 		<if test="cid != null and cid != ''">#{cid},</if>
 		<if test="status != null and status != ''">#{status},</if>
+		<if test="outstatus != null and outstatus != ''">#{outstatus},</if>
 		<if test="years != null and years != ''">#{years}</if>
 		)
 	</insert>
