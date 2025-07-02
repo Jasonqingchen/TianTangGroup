@@ -109,7 +109,7 @@
 						title: '商品名称',
 						formatter: function(value, row, index) {
 							//var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
-							var html = $.common.sprintf("<input type='text' placeholder='输入产品' class='form-control goodsName' name='goods[%s].productname' value='%s' clearable required>", index, value);
+							var html = $.common.sprintf("<input type='text' placeholder='输入产品信息' class='form-control goodsName' name='goods[%s].productname' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -118,7 +118,7 @@
 						align: 'center',
 						title: '商品单价',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control goodsName'  type='text' name='goods[%s].price' value='%s' required>", index, value);
+							var html = $.common.sprintf("<input class='form-control goodsName'  type='number' name='goods[%s].price' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -136,7 +136,7 @@
 						align: 'center',
 						title: '数量',
 						formatter: function(value, row, index) {
-							var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].cou' value='%s' required>", index, value);
+							var html = $.common.sprintf("<input class='form-control goodsName' type='number' name='goods[%s].cou' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -199,7 +199,7 @@
 			}
 
 			$.get(plist + '/productsellist', function(data){
-				$(".form-control").typeahead({
+				document.getElementsByName("productname").typeahead({
 					source: data
 				});
 			},'json');
