@@ -38,7 +38,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">发票号：</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="请输入发票号" th:field="*{receiptnumber}" required></input>
+						<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="请输入发票号" th:field="*{receiptnumber}" disabled required></input>
 					</div>
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 				<div class="form-group">
 					<label class="col-xs-2 control-label">备注：</label>
 					<div class="col-xs-10">
-						<textarea class="form-control" type="text" maxlength="800"  name="bz" id="bz" placeholder="跟进详情" th:field="*{bz}"></textarea>
+						<textarea class="form-control" type="text" maxlength="800"  name="bz" id="bz" placeholder="跟进详情" disabled th:field="*{bz}"></textarea>
 					</div>
 				</div>
 			</div>
@@ -168,6 +168,18 @@
 					}
 				});
 				$("#name").each(function() {
+					if (parseInt($(this).val()) != -1) {
+						$(this).attr("disabled", false);
+					}
+				});
+
+				$("#bz").each(function() {
+					if (parseInt($(this).val()) != -1) {
+						$(this).attr("disabled", false);
+					}
+				});
+
+				$("#receiptnumber").each(function() {
 					if (parseInt($(this).val()) != -1) {
 						$(this).attr("disabled", false);
 					}

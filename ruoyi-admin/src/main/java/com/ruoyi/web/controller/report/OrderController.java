@@ -112,7 +112,7 @@ public class OrderController  extends BaseController {
         //先删除原来订单
         oMapper.deleteReportById(ordersModel.getId());
         // Sam time del connect table for oid = id
-        poMapper.delByOid(ordersModel.getOid());
+        poMapper.delByOid(ordersModel.getId());
         if(oModel.getGoods()==null){
             return AjaxResult.error("未填写商品 无法下单");
         } else {

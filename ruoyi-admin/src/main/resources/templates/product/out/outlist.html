@@ -201,6 +201,7 @@
 				confirmoutorder: prefix + "/conform",
 				fconfirmoutorder: prefix + "/fconform",
 				exportUrl: prefix + "/export",
+				ordersUrl: outprefix + "/order/{id}",
 				importUrl: prefix + "/importData",
 				importTemplateUrl: prefix + "/importTemplate",
 				showSearch: false,
@@ -266,6 +267,11 @@
 						width:300,
 						formatter: function(value, row, index) {
 							var actions = [];
+							if(row.outstatus == '已审核'){
+								actions.push('<button disabled class="btn btn-warning btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑订单</button>&nbsp;&nbsp;&nbsp;');
+							} else {
+								actions.push('<button class="btn btn-warning btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑订单</button>&nbsp;&nbsp;&nbsp;');
+							}
 							if(row.outstatus == '已审核'){
 								actions.push('<button  class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印出库单</button>');
 							} else {
