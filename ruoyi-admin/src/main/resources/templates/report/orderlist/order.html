@@ -10,6 +10,8 @@
 <div class="main-content">
 	<form id="form-add" class="form-horizontal" th:object="${cModel}">
 		<input name="id" id="id" type="hidden"  th:field="*{id}" />
+		<input name="oid" id="oid" type="hidden"  th:field="*{oid}" />
+		<input name="obj" id="obj" type="hidden"  th:object="${cModel.goods}" />
 		<h4 class="form-header h4">客户信息</h4>
 		<div class="row">
 			<div class="col-sm-6">
@@ -36,7 +38,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">发票号：</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="请输入发票号" required></input>
+						<input class="form-control" type="text" name="receiptnumber" id="receiptnumber" placeholder="请输入发票号" th:field="*{receiptnumber}" required></input>
 					</div>
 				</div>
 			</div>
@@ -44,7 +46,7 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">支付金额：</label>
 					<div class="col-sm-8">
-						<input class="form-control" type="text" name="pay" id="pay" placeholder="金额" required></input>
+						<input class="form-control" type="text" name="pay" id="pay" placeholder="金额" th:field="*{pay}" required></input>
 					</div>
 				</div>
 			</div>
@@ -62,7 +64,8 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<button type="button" class="btn btn-white btn-sm" onclick="addRow()"><i class="fa fa-plus"> 增加</i></button>
-				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRows()"><i class="fa fa-minus"> 删除</i></button>
+				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRow()"><i class="fa fa-minus"> 删除</i></button>
+				<button type="button" class="btn btn-white btn-sm" onclick="test()"><i class="glyphicon glyphicon-search">获取该订单商品</i></button>
 				<div class="col-sm-12 select-table table-striped">
 					<table id="bootstrap-table"></table>
 				</div>
@@ -79,6 +82,8 @@
 	<script type="text/javascript">
 		var prefix = ctx + "report/listdata";
 		var plist = ctx + "product/list";
+		var ordlplist = ctx + "report/orderlist";
+		var id = document.getElementById("oid").value;
 		$(function() {
 			// 初始化数据, 可以由后台传过来
 			var data = [];
@@ -145,12 +150,15 @@
 						align: 'center',
 						formatter: function(value, row, index) {
 							var value = $.common.isNotEmpty(row.index) ? row.index : $.table.serialNumber(index);
-							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delrow(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
+							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delRowByIndex(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
 						}
 					}]
 			};
 			$.table.init(options);
 		});
+
+
+
 		/* 主子表-提交 */
 		function submitHandler(index, layero){
 			if ($.validate.form()) {
@@ -165,7 +173,7 @@
 					}
 				});
 				var data = $("#form-add").serializeArray();
-				$.operate.save(prefix + "/order", data);
+				$.operate.save(ordlplist + "/updateorder", data);
 			}
 		}
 
@@ -199,24 +207,39 @@
 			}
 
 			$.get(plist + '/productsellist', function(data){
-				document.getElementsByName("productname").typeahead({
+				$(".form-control").typeahead({
 					source: data
 				});
 			},'json');
 			sub.addRow(row);
-			//查询商品信息
-			/*fetch(plist + '/productsellist')
-					.then(response => response.json())
-					.then(data => {
-						var optionss = '';
-						data.forEach(item => {
-							$(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
-						});
-
-					}).catch(error => console.error('Error:', error));*/
 
 		}
 
+		//回显订单数据 供修改
+		function test() {
+			$.ajax({
+				url: ordlplist	 + "/ordlist",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				data: {'id':id},
+				async: false,
+				success: function(data) {
+					for (var i = 0; i < data.data.length; i++) {
+						var count = $("#" + table.options.id).bootstrapTable('getData').length;
+						var row = {
+							index: count+1,
+							productname: data.data[i].productname,
+							price: data.data[i].price,
+							psize: data.data[i].psize,
+							cou: data.data[i].cou,
+
+						}
+						sub.addrow(row);
+					}
+				}
+
+			});
+		}
 
 
 	</script>

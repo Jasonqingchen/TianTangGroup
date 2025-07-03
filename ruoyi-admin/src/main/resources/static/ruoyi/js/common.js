@@ -505,29 +505,20 @@ var sub = {
         $("#" + currentId).bootstrapTable('remove', { field: "index", values: [value] });
         sub.editRow();
     },
-    /*开始*/
-    /*这里是解决删除清除回显数据问题的方式 需自定义方法*/
-    delRows: function(column) {
-        sub.editRow();
-        var subColumn = $.common.isEmpty(column) ? "index" : column;
-        var ids = $.table.selectColumns(subColumn);
-        if (ids.length == 0) {
-            $.modal.alertWarning("请至少选择一条记录");
-            return;
-        }
-        $("#" + table.options.id).bootstrapTable('remove', { field: subColumn, values: ids });
-    },
-    delrow(value, tableId){
-        var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
-        $("#" + currentId).bootstrapTable('remove', { field: "index", values: [value] });
-    },
-    /*结束*/
     addRow: function(row, tableId) {
     	var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
     	table.set(currentId);
     	var count = $("#" + currentId).bootstrapTable('getData').length;
     	sub.editRow();
     	$("#" + currentId).bootstrapTable('insertRow', { index: count + 1, row: row });
+    },
+    /*自定义*/
+    addrow: function(row, tableId) {
+        var currentId = $.common.isEmpty(tableId) ? table.options.id : tableId;
+        table.set(currentId);
+        var count = $("#" + currentId).bootstrapTable('getData').length;
+        sub.editRow();
+        $("#" + currentId).bootstrapTable('insertRow', { index: count+1, row: row });
     }
 };
 

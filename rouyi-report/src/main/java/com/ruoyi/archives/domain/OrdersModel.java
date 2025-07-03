@@ -49,6 +49,16 @@ public class OrdersModel extends BaseEntity {
 
     private String productname;
 
+    private String Oid;
+
+    public String getOid() {
+        return Oid;
+    }
+
+    public void setOid(String oid) {
+        Oid = oid;
+    }
+
     public String getOutstatus() {
         return Outstatus;
     }

@@ -3,6 +3,11 @@ package com.ruoyi.archives.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.product.domain.ProOrderModel;
+import com.ruoyi.product.domain.ProductModel;
+import com.ruoyi.product.mapper.ProOrdertMapper;
+
+import java.util.List;
 
 public class ClientModel extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -27,13 +32,60 @@ public class ClientModel extends BaseEntity {
     private String Xydj;
     @Excel(name = "客户属性")
     private String Type;
+    //临时状态
     private String Sex;
+    //临时状态
     private String Gjdate;
+    //临时状态
     private String Balance;
+    //临时状态
     private String Flag;
+    //临时状态
+    private String receiptnumber;
+
+    private String pay;
 
     //临时状态
     private String Cou;
+    //临时状态
+    private String Oid;
+
+    public String getOid() {
+        return Oid;
+    }
+
+    public void setOid(String oid) {
+        Oid = oid;
+    }
+
+    /**
+     * 商品信息
+     */
+    private List<ProOrderModel> goods;
+
+    public List<ProOrderModel> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(List<ProOrderModel> goods) {
+        this.goods = goods;
+    }
+
+    public String getReceiptnumber() {
+        return receiptnumber;
+    }
+
+    public void setReceiptnumber(String receiptnumber) {
+        this.receiptnumber = receiptnumber;
+    }
+
+    public String getPay() {
+        return pay;
+    }
+
+    public void setPay(String pay) {
+        this.pay = pay;
+    }
 
     public String getType() {
         return Type;

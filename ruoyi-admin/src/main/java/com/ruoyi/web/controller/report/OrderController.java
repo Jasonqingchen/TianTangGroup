@@ -1,15 +1,19 @@
 package com.ruoyi.web.controller.report;
 
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.archives.domain.ClientModel;
 import com.ruoyi.archives.domain.OrdersModel;
 import com.ruoyi.archives.mapper.ClientMapper;
 import com.ruoyi.archives.mapper.OrdersMapper;
+import com.ruoyi.product.domain.ProOrderModel;
+import com.ruoyi.product.domain.ProductModel;
 import com.ruoyi.product.mapper.ProOrdertMapper;
 import com.ruoyi.system.service.impl.SysUserServiceImpl;
 import org.apache.shiro.authz.annotation.Logical;
@@ -23,12 +27,10 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * About order
@@ -45,6 +47,7 @@ public class OrderController  extends BaseController {
 
     @Autowired
     private ProOrdertMapper poMapper;
+
 
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
     private String prefix = "report/orderlist";
@@ -93,6 +96,46 @@ public class OrderController  extends BaseController {
     }
 
     /**
+     * update order information
+     *
+     */
+    @Log(title = "修改订单", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateorder")
+    @ResponseBody
+    public AjaxResult updateorder(OrdersModel oModel)
+    {
+        //获得当前订单信息
+        OrdersModel ordersModel = oMapper.selectOrderById(oModel.getOid());
+        ordersModel.setPay(oModel.getPay());
+        ordersModel.setBz(oModel.getBz());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //先删除原来订单
+        oMapper.deleteReportById(ordersModel.getId());
+        // Sam time del connect table for oid = id
+        poMapper.delByOid(ordersModel.getOid());
+        if(oModel.getGoods()==null){
+            return AjaxResult.error("未填写商品 无法下单");
+        } else {
+            //save to new Orderpro table and use order table the id connect
+            ProOrderModel pom = new ProOrderModel();
+            List<ProductModel> goods = oModel.getGoods();
+            goods.forEach(go->{
+                pom.setCou(go.getCou());
+                pom.setId(String.valueOf(Math.random()*999999999));
+                pom.setDate(formatter.format(new Date()));
+                pom.setPrice(go.getPrice());
+                pom.setProductname(go.getProductname());
+                pom.setPsize(go.getPsize());
+                pom.setSsxs(ordersModel.getSsxs());
+                pom.setOid(ordersModel.getId());
+                poMapper.insertProOrder(pom);
+            });
+        }
+
+        return AjaxResult.success(oMapper.insertOrder(ordersModel));
+    }
+
+    /**
      * 审核下推订单
      */
     @PostMapping("/conform")
@@ -114,6 +157,54 @@ public class OrderController  extends BaseController {
     }
 
     /**
+     * 修改订单-跳转
+     */
+    @GetMapping("/order/{id}")
+    public String order(@PathVariable("id") String id, ModelMap mmap)
+    {
+        //入参为 订单 id
+        OrdersModel om = oMapper.selectOrderById(id);
+        ClientModel clientModel = cMapper.selectClientById(om.getCid());
+        clientModel.setOid(id);
+        clientModel.setPay(om.getPay());
+        clientModel.setReceiptnumber(om.getReceiptnumber());
+        clientModel.setGoods(poMapper.selectAllByOid(id));
+        mmap.put("cModel", clientModel);
+        return prefix + "/order";
+    }
+
+    /**
+     * 获取指定订单商品数据
+     */
+    @PostMapping("/ordlist")
+    @ResponseBody
+    public AjaxResult goods(String id)
+    {
+        List<ProOrderModel> proOrderModels = poMapper.selectAllByOid(id);
+        return AjaxResult.success(proOrderModels);
+    }
+
+    /**
+     * 反审核
+     */
+    @PostMapping("/fconform")
+    @ResponseBody
+    public AjaxResult fconform(String ids)
+    {
+        String [] idss = Convert.toStrArray(ids);
+        for (String id : idss)
+        {
+            OrdersModel om = oMapper.selectOrderById(id);
+            if (om.getOutstatus().equals("已审核")) {
+                return AjaxResult.error("已出库商品无法反审核订单");
+            }
+            om.setStatus("未审核");
+            oMapper.updateOrder(om);
+        }
+        return AjaxResult.success();
+    }
+
+    /**
      * 打印回显数据
      */
     @PostMapping("/back")
@@ -123,16 +214,6 @@ public class OrderController  extends BaseController {
         mmap.put("Model", oMapper.selectCusAndProById(id));
         return AjaxResult.success(mmap);
     }
-   /* @GetMapping("/back/{id}")
-    public String back(@PathVariable("id") String id, ModelMap mmap)
-    {
-        mmap.put("Model", oMapper.selectCusAndProById(id));
-        List list = new ArrayList();
-        oMapper.selectCusAndProById(id).forEach(ff->{
-            list.add(ff);
-        });
-        return  prefix + "/orderslist";
-    }*/
 
     /**
      * 导入订单数据

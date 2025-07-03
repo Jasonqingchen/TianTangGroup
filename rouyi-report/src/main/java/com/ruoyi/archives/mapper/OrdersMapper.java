@@ -71,6 +71,13 @@ public interface OrdersMapper
      */
     Integer selectOrderByCid(String id);
 
+    /**
+     * 用户 Id 与 Cid 关联确认是否存在订单 返回实体对象接口
+     * @param id
+     * @return
+     */
+    OrdersModel selectOrderByCids(String id);
+
 
     /**
      * 回显订单数据

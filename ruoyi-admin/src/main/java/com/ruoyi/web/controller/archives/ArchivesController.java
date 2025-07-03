@@ -220,7 +220,7 @@ public class ArchivesController extends BaseController {
             fileModel.setId(String.valueOf(Math.random()*999999999));
 
             Integer integer = fMapper.insertFile(fileModel);
-            return ResponseEntity.ok("上传成功");
+            return ResponseEntity.status(HttpStatus.OK).body("上传成功");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("上传失败");
         }

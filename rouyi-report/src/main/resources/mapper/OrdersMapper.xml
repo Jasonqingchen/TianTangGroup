@@ -19,6 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="years" jdbcType="VARCHAR" property="years" />
 		<result column="outstatus" jdbcType="VARCHAR" property="outstatus" />
 	</resultMap>
+
+	<!--返回对象-->
+	<select id="selectOrderByCids" resultMap="OrderResult">
+		select * from orders where cid = #{id}
+	</select>
 	<!-- 只查询审核状态为已审核的数据-->
 	<select id="selectAllByStatus" resultMap="OrderResult">
 		select * from orders as o where 1=1
@@ -35,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND o.date = #{date}
 		</if>
 		<if test="receiptnumber != null and receiptnumber != ''">
-			AND c.receiptnumber like concat('%', #{receiptnumber}, '%')
+			AND o.receiptnumber like concat('%', #{receiptnumber}, '%')
 		</if>
 		<if test="status != null and status != '' and status!='所有'">
 			AND o.status = #{status}

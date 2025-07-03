@@ -13,4 +13,6 @@ public interface ProOrdertMapper
    Integer insertProOrder(ProOrderModel pr);
 
    Integer delByOid(String id);
+
+   List<ProOrderModel> selectAllByOid(String id);
 }

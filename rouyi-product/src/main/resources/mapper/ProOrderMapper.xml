@@ -15,7 +15,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="cou" jdbcType="VARCHAR" property="cou" />
 		<result column="price" jdbcType="VARCHAR" property="price" />
 	</resultMap>
-
+	<!--获取对应的订单产品数据集合-->
+	<select id="selectAllByOid" resultMap="ProOrderResult">
+		select * from proorder where oid = #{id}
+	</select>
 	<!--删除-->
 	<delete id="delByOid">
 		delete from proorder as p  where p.oid = #{id}

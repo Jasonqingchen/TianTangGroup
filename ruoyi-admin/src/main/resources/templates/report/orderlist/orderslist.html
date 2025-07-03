@@ -64,6 +64,9 @@
 			<a class="btn btn-info multiple disabled" onclick="$.operate.conform()">
 				<i class="filter"></i> 审核下推
 			</a>
+			<a class="btn btn-danger multiple disabled" onclick="$.operate.fconform()">
+				<i class="fa fa-remove"></i> 反审核
+			</a>
 
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：若添加订单请移步到客户列表页面</strong></span>
         </div>
@@ -167,7 +170,6 @@
         var prefix = ctx + "report/orderlist";
         var datas = [[${@dict.getType('report_order_status')}]];
 		var dataout = [[${@dict.getType('product_out_status')}]];
-		var modelss = [];
 		var html = [];
         $(function() {
             var options = {
@@ -175,6 +177,8 @@
                 createUrl: prefix + "/add",
                 removeUrl: prefix + "/remove",
 				confirmorder: prefix + "/conform",
+				fconfirmoutorder: prefix + "/fconform",
+				ordersUrl: prefix + "/order/{id}",
                 exportUrl: prefix + "/export",
                 importUrl: prefix + "/importData",
                 importTemplateUrl: prefix + "/importTemplate",
@@ -239,14 +243,22 @@
 					},{
 		            title: '操作',
 		            align: 'center',
-					width:200,
+					width:300,
 		            formatter: function(value, row, index) {
 		            	var actions = [];
+						if(row.status == '已审核'){
+							actions.push('<button disabled class="btn btn-success btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑订单</button>&nbsp;&nbsp;&nbsp;');
+						} else {
+							actions.push('<button class="btn btn-success btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑订单</button>&nbsp;&nbsp;&nbsp;');
+						}
+
 						if(row.status == '已审核'){
 							actions.push('<button disabled class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</button>&nbsp;&nbsp;&nbsp;');
 						} else {
 							actions.push('<button class="btn btn-danger btn-xs" href="javascript:;" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</button>&nbsp;&nbsp;&nbsp;');
 						}
+
+
 
 						if(row.status == '已审核'){
 							actions.push('<button  class="btn btn-xs btn-success"  data-target="#printArea" onclick="printOrder(\'' + row.id + '\')" data-toggle="modal" ><i class="glyphicon glyphicon-print"></i>打印订单</button>');
