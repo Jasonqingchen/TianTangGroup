@@ -31,15 +31,155 @@ public class ProductModel extends BaseEntity {
     @Excel(name = "库存")
     private String Stock;
 
-    @Excel(name = "产品编码")
+    @Excel(name = "编码")
     private String Pcode;
 
     @Excel(name = "产品尺寸")
     private String Psize;
+    @Excel(name = "货柜号码")
+    private String Containercode;
+    @Excel(name = "供应商")
+    private String Supplier;
+    @Excel(name = "批次号")
+    private String Pccode;
+    @Excel(name = "应收数量")
+    private String Ysnumber;
+    @Excel(name = "实收数量")
+    private String Ssnumber;
+    @Excel(name = "计价数量")
+    private String Jjnumber;
+    @Excel(name = "单价")
+    private String Dj;
+    @Excel(name = "总价")
+    private String Totalpirce;
+    @Excel(name = "含税价格")
+    private String Hspirce;
+    @Excel(name = "税率")
+    private String Sl;
+    @Excel(name = "税额")
+    private String Se;
+    @Excel(name = "价税合计")
+    private String Jshj;
+    @Excel(name = "净价")
+    private String Jj;
+    @Excel(name = "库存单位")
+    private String Kcdw;
 
     private String Cou;
 
     private String Price;
+
+    public String getContainercode() {
+        return Containercode;
+    }
+
+    public void setContainercode(String containercode) {
+        Containercode = containercode;
+    }
+
+    public String getSupplier() {
+        return Supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        Supplier = supplier;
+    }
+
+    public String getPccode() {
+        return Pccode;
+    }
+
+    public void setPccode(String pccode) {
+        Pccode = pccode;
+    }
+
+    public String getYsnumber() {
+        return Ysnumber;
+    }
+
+    public void setYsnumber(String ysnumber) {
+        Ysnumber = ysnumber;
+    }
+
+    public String getSsnumber() {
+        return Ssnumber;
+    }
+
+    public void setSsnumber(String ssnumber) {
+        Ssnumber = ssnumber;
+    }
+
+    public String getJjnumber() {
+        return Jjnumber;
+    }
+
+    public void setJjnumber(String jjnumber) {
+        Jjnumber = jjnumber;
+    }
+
+    public String getDj() {
+        return Dj;
+    }
+
+    public void setDj(String dj) {
+        Dj = dj;
+    }
+
+    public String getTotalpirce() {
+        return Totalpirce;
+    }
+
+    public void setTotalpirce(String totalpirce) {
+        Totalpirce = totalpirce;
+    }
+
+    public String getHspirce() {
+        return Hspirce;
+    }
+
+    public void setHspirce(String hspirce) {
+        Hspirce = hspirce;
+    }
+
+    public String getSl() {
+        return Sl;
+    }
+
+    public void setSl(String sl) {
+        Sl = sl;
+    }
+
+    public String getSe() {
+        return Se;
+    }
+
+    public void setSe(String se) {
+        Se = se;
+    }
+
+    public String getJshj() {
+        return Jshj;
+    }
+
+    public void setJshj(String jshj) {
+        Jshj = jshj;
+    }
+
+    public String getJj() {
+        return Jj;
+    }
+
+    public void setJj(String jj) {
+        Jj = jj;
+    }
+
+    public String getKcdw() {
+        return Kcdw;
+    }
+
+    public void setKcdw(String kcdw) {
+        Kcdw = kcdw;
+    }
 
     public String getPrice() {
         return Price;
