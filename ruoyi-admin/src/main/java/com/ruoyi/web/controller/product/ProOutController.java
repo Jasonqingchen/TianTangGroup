@@ -27,7 +27,7 @@ import java.util.List;
  * about product out
  * liuqingchen
  */
-@RequiresRoles(value = {"admin", "out"}, logical = Logical.OR)
+@RequiresRoles(value = {"admin", "product"}, logical = Logical.OR)
 @RequestMapping("/product/out")
 @Controller
 public class ProOutController   extends BaseController {
@@ -57,7 +57,6 @@ public class ProOutController   extends BaseController {
     /**
      * 查询数据
      */
-    @RequiresPermissions("product:out:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(OrdersModel oMordel)

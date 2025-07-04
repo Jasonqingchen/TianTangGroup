@@ -64,7 +64,7 @@
 			<a class="btn btn-info multiple disabled" onclick="$.operate.conform()">
 				<i class="filter"></i> 审核下推
 			</a>
-			<a class="btn btn-danger multiple disabled" onclick="$.operate.fconform()">
+			<a shiro:hasAnyRoles="admin,salesM" class="btn btn-danger multiple disabled" onclick="$.operate.fconform()">
 				<i class="fa fa-remove"></i> 反审核
 			</a>
 
