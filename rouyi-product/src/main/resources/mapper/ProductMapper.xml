@@ -48,6 +48,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="psize != null and psize != ''">
 			AND psize = #{psize}
 		</if>
+		<if test="containercode != null and containercode != ''">
+			AND containercode like concat('%', #{containercode}, '%')
+		</if>
 	</select>
 	<!--列表查询-->
 	<select id="selectAll" resultMap="ProductResult">
@@ -60,6 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="pcode != null and pcode != ''">
 			AND pcode = #{pcode}
+		</if>
+		<if test="containercode != null and containercode != ''">
+			AND containercode like concat('%', #{containercode}, '%')
 		</if>
 	</select>
 	<!--删除-->

@@ -30,6 +30,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -174,6 +176,15 @@ public class ProductController  extends BaseController {
         String message = this.importClient(pModel, updateSupport);
         return AjaxResult.success(message);
     }
+    // 下载模板
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public void importTemplate(Boolean delete, HttpServletResponse response, HttpServletRequest request)
+    {
+        ExcelUtil<ProductModel> util = new ExcelUtil<ProductModel>(ProductModel.class);
+        util.importTemplateExcel("入库模版数据");
+    }
+
     /**
      * 导入数据
      *
@@ -200,8 +211,11 @@ public class ProductController  extends BaseController {
         {
             try
             {
-                // 验证是否存在这个数据 By 物料编码-pcode
-                ProductModel ps = proMapper.selectClientByPcode(item.getPcode());
+                ProductModel ps = null;
+                if(item.getPcode().isEmpty()){
+                    // 验证是否存在这个数据 By 物料编码-pcode
+                     ps = proMapper.selectClientByPcode(item.getPcode());
+                }
                 if (StringUtils.isNull(ps))
                 {
                     item.setId(String.valueOf(Math.random()*999999999));

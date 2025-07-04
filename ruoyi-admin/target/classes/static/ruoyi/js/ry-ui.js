@@ -406,6 +406,24 @@ var table = {
                     }
                 });
             },
+
+            //下载模版自定义 客户列表模版
+            importTemplatecuslistpro: function() {
+                var prefix = ctx + "product/list";
+                $.get(activeWindow().table.options.importTemplateUrl, function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = prefix + "/importTemplate"
+                    } else  {
+                        $.modal.alertSuccess("下载成功 ！请到桌面查看");
+                    }
+                });
+            },
+
+
+
+
+
+
             // 下载模板
             importTemplate: function() {
                 $.get(activeWindow().table.options.importTemplateUrl, function(result) {

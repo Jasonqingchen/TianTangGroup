@@ -6,23 +6,17 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 public class ProductModel extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    @Excel(name = "产品ID")
     private String Id;
     @Excel(name = "产品名称")
     private String Productname;
     @Excel(name = "备注")
     private String Bz;
-    @Excel(name = "入库时间")
     private String Date;
-    @Excel(name = "入库人")
     private String Rkname;
-    @Excel(name = "当前登录用户 id")
     private String Userid;
 
-    @Excel(name = "部门id")
     private String Did;
 
-    @Excel(name = "部门名字")
     private String Depname;
 
     @Excel(name = "仓库")
