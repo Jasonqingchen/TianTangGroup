@@ -351,6 +351,12 @@ public class RptDataController extends BaseController {
                 }
                 else if (isUpdateSupport)
                 {
+                    client.setId(u.getId());
+                    client.setBalance("0");
+                    LocalDate date = LocalDate.parse(client.getDate(), inputFormatter);
+                    LocalDate gjdate = LocalDate.parse(client.getGjdate(), inputFormatter);
+                    client.setDate(date.format(outputFormatter));
+                    client.setGjdate(gjdate.format(outputFormatter));
                     //更新用户
                     cMapper.updateClient(client);
                     successNum++;

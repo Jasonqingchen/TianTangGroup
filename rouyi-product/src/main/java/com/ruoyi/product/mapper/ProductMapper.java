@@ -48,4 +48,10 @@ public interface ProductMapper
      */
     Integer updateProduct(ProductModel proModel);
 
+
+    /**
+     * by pcodee search productModel
+     */
+    ProductModel selectClientByPcode(String code);
+
 }

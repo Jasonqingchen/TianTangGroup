@@ -10,11 +10,11 @@ public class ProductModel extends BaseEntity {
     private String Id;
     @Excel(name = "产品名称")
     private String Productname;
-    @Excel(name = "产品备注")
+    @Excel(name = "备注")
     private String Bz;
-    @Excel(name = "时间")
+    @Excel(name = "入库时间")
     private String Date;
-    @Excel(name = "入库人姓名")
+    @Excel(name = "入库人")
     private String Rkname;
     @Excel(name = "当前登录用户 id")
     private String Userid;
@@ -25,7 +25,7 @@ public class ProductModel extends BaseEntity {
     @Excel(name = "部门名字")
     private String Depname;
 
-    @Excel(name = "所属仓库")
+    @Excel(name = "仓库")
     private String Ssck;
 
     @Excel(name = "库存")
@@ -34,9 +34,9 @@ public class ProductModel extends BaseEntity {
     @Excel(name = "编码")
     private String Pcode;
 
-    @Excel(name = "产品尺寸")
+    @Excel(name = "规格型号")
     private String Psize;
-    @Excel(name = "货柜号码")
+    @Excel(name = "货柜号")
     private String Containercode;
     @Excel(name = "供应商")
     private String Supplier;
