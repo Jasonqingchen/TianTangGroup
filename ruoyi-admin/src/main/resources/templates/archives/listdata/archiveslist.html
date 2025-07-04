@@ -107,6 +107,9 @@
 					field : 'bz',
 					title : '文件路径',
 					width:200,
+					cellStyle: function (value, row, index) {
+						return { css: { "color": "#1e67b2"} }
+					},
 				}, {
 					field : 'date',
 					title : '上传时间',

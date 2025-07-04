@@ -50,10 +50,10 @@ public class ProductModel extends BaseEntity {
     private String Jjnumber;
     @Excel(name = "单价")
     private String Dj;
-    @Excel(name = "总价")
-    private String Totalpirce;
+    @Excel(name = "金额")
+    private String Totalprice;
     @Excel(name = "含税价格")
-    private String Hspirce;
+    private String Hsprice;
     @Excel(name = "税率")
     private String Sl;
     @Excel(name = "税额")
@@ -65,9 +65,20 @@ public class ProductModel extends BaseEntity {
     @Excel(name = "库存单位")
     private String Kcdw;
 
+    @Excel(name = "计价单位")
+    private String Jjdw;
+
     private String Cou;
 
     private String Price;
+
+    public String getJjdw() {
+        return Jjdw;
+    }
+
+    public void setJjdw(String jjdw) {
+        Jjdw = jjdw;
+    }
 
     public String getContainercode() {
         return Containercode;
@@ -125,20 +136,20 @@ public class ProductModel extends BaseEntity {
         Dj = dj;
     }
 
-    public String getTotalpirce() {
-        return Totalpirce;
+    public String getTotalprice() {
+        return Totalprice;
     }
 
-    public void setTotalpirce(String totalpirce) {
-        Totalpirce = totalpirce;
+    public void setTotalprice(String totalprice) {
+        Totalprice = totalprice;
     }
 
-    public String getHspirce() {
-        return Hspirce;
+    public String getHsprice() {
+        return Hsprice;
     }
 
-    public void setHspirce(String hspirce) {
-        Hspirce = hspirce;
+    public void setHsprice(String hsprice) {
+        Hsprice = hsprice;
     }
 
     public String getSl() {

@@ -111,6 +111,10 @@
 					field : 'productname',
 					title : '产品名称',
 					width:150,
+				},{
+					field : 'pccode',
+					title : '批次号',
+					width:100,
 				},
 				{
 					field : 'pcode',
@@ -159,19 +163,47 @@
 					},{
 						field : 'jjnumber',
 						title : '计价数量',
-						width:100,
+						width:100
 					},{
 						field : 'dj',
 						title : '单价',
 						width:100,
+						cellStyle: function (value, row, index) {
+							return { css: { "color": "#bd2c00"} }
+						},
+						formatter: function(value, row, index) {
+							if (value!=null){
+								value = "￥" + value;
+								return $.table.tooltip(value, 30, "open");
+							}
+						}
+
 					},{
-						field : 'je',
+						field : 'totalprice',
 						title : '金额',
 						width:100,
+						cellStyle: function (value, row, index) {
+							return { css: { "color": "#bd2c00"} }
+						},
+						formatter: function(value, row, index) {
+							if (value!=null){
+								value = "￥" + value;
+								return $.table.tooltip(value, 30, "open");
+							}
+						}
 					},{
 						field : 'hsprice',
 						title : '含税单价',
 						width:100,
+						cellStyle: function (value, row, index) {
+							return { css: { "color": "#bd2c00"} }
+						},
+						formatter: function(value, row, index) {
+							if (value!=null){
+								value = "￥" + value;
+								return $.table.tooltip(value, 30, "open");
+							}
+						}
 					},{
 						field : 'se',
 						title : '税额',
@@ -184,9 +216,31 @@
 						field : 'jshj',
 						title : '价税合计',
 						width:100,
+						cellStyle: function (value, row, index) {
+							return { css: { "color": "#bd2c00"} }
+						},
+						formatter: function(value, row, index) {
+							if (value!=null){
+								value = "￥" + value;
+								return $.table.tooltip(value, 30, "open");
+							}
+						}
 					},{
 						field : 'jj',
 						title : '净价',
+						width:100,
+						cellStyle: function (value, row, index) {
+							return { css: { "color": "#bd2c00"} }
+						},
+						formatter: function(value, row, index) {
+							if (value!=null){
+								value = "￥" + value;
+								return $.table.tooltip(value, 30, "open");
+							}
+						}
+					},{
+						field : 'supplier',
+						title : '供应商',
 						width:100,
 					},{
 						field : 'bz',

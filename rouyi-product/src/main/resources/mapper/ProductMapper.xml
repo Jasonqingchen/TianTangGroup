@@ -24,13 +24,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="ssnumber" jdbcType="VARCHAR" property="ssnumber" />
 		<result column="jjnumber" jdbcType="VARCHAR" property="jjnumber" />
 		<result column="dj" jdbcType="VARCHAR" property="dj" />
-		<result column="totalpirce" jdbcType="VARCHAR" property="totalpirce" />
-		<result column="hspirce" jdbcType="VARCHAR" property="hspirce" />
+		<result column="totalprice" jdbcType="VARCHAR" property="totalprice" />
+		<result column="hsprice" jdbcType="VARCHAR" property="hsprice" />
 		<result column="sl" jdbcType="VARCHAR" property="sl" />
 		<result column="se" jdbcType="VARCHAR" property="se" />
 		<result column="jshj" jdbcType="VARCHAR" property="jshj" />
 		<result column="jj" jdbcType="VARCHAR" property="jj" />
 		<result column="kcdw" jdbcType="VARCHAR" property="kcdw" />
+		<result column="jjdw" jdbcType="VARCHAR" property="jjdw" />
 	</resultMap>
 
 
@@ -86,8 +87,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="stock != null and stock != ''">stock,</if>
 		<if test="ssck != null and ssck != ''">ssck,</if>
 		<if test="depname != null and depname != ''">depname,</if>
-
-
 		<if test="containercode != null and containercode != ''">containercode,</if>
 		<if test="supplier != null and supplier != ''">supplier,</if>
 		<if test="pccode != null and pccode != ''">pccode,</if>
@@ -95,13 +94,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="ssnumber != null and ssnumber != ''">ssnumber,</if>
 		<if test="jjnumber != null and jjnumber != ''">jjnumber,</if>
 		<if test="dj != null and dj != ''">dj,</if>
-		<if test="totalpirce != null and totalpirce != ''">totalpirce,</if>
-		<if test="hspirce != null and hspirce != ''">hspirce,</if>
+		<if test="totalprice != null and totalprice != ''">totalprice,</if>
+		<if test="hsprice != null and hsprice != ''">hsprice,</if>
 		<if test="sl != null and sl != ''">sl,</if>
 		<if test="se != null and se != ''">se,</if>
 		<if test="jshj != null and jshj != ''">jshj,</if>
 		<if test="jj != null and jj != ''">jj,</if>
-		<if test="kcdw != null and kcdw != ''">kcdw</if>
+		<if test="kcdw != null and kcdw != ''">kcdw,</if>
+		<if test="jjdw != null and jjdw != ''">jjdw</if>
 		)values(
 		<if test="id != null and id != ''">#{id},</if>
 		<if test="productname != null and productname != ''">#{productname},</if>
@@ -122,13 +122,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="ssnumber != null and ssnumber != ''">#{ssnumber},</if>
 		<if test="jjnumber != null and jjnumber != ''">#{jjnumber},</if>
 		<if test="dj != null and dj != ''">#{dj},</if>
-		<if test="totalpirce != null and totalpirce != ''">#{totalpirce},</if>
-		<if test="hspirce != null and hspirce != ''">#{hspirce},</if>
+		<if test="totalprice != null and totalprice != ''">#{totalprice},</if>
+		<if test="hsprice != null and hsprice != ''">#{hsprice},</if>
 		<if test="sl != null and sl != ''">#{sl},</if>
 		<if test="se != null and se != ''">#{se},</if>
 		<if test="jshj != null and jshj != ''">#{jshj},</if>
 		<if test="jj != null and jj != ''">#{jj},</if>
-		<if test="kcdw != null and kcdw != ''">#{kcdw}</if>
+		<if test="kcdw != null and kcdw != ''">#{kcdw},</if>
+		<if test="jjdw != null and jjdw != ''">#{jjdw}</if>
 		)
 	</insert>
 
@@ -155,13 +156,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="ssnumber != null and ssnumber != ''">ssnumber = #{ssnumber},</if>
 			<if test="jjnumber != null and jjnumber != ''">jjnumber = #{jjnumber},</if>
 			<if test="dj != null and dj != ''">dj = #{dj},</if>
-			<if test="totalpirce != null and totalpirce != ''">totalpirce = #{totalpirce},</if>
-			<if test="hspirce != null and hspirce != ''">hspirce = #{hspirce},</if>
+			<if test="totalprice != null and totalprice != ''">totalprice = #{totalprice},</if>
+			<if test="hsprice != null and hsprice != ''">hsprice = #{hsprice},</if>
 			<if test="sl != null and sl != ''">sl = #{sl},</if>
 			<if test="se != null and se != ''">se = #{se},</if>
 			<if test="jshj != null and jshj != ''">jshj = #{jshj},</if>
 			<if test="jj != null and jj != ''">jj = #{jj},</if>
-			<if test="kcdw != null and kcdw != ''">kcdw = #{kcdw}</if>
+			<if test="kcdw != null and kcdw != ''">kcdw = #{kcdw},</if>
+			<if test="jjdw != null and jjdw != ''">jjdw = #{jjdw}</if>
 		</set>
 		where id = #{id}
 	</update>
