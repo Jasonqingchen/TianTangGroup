@@ -236,6 +236,11 @@
 				data: {'id':id},
 				async: false,
 				success: function(data) {
+					$.get(plist + '/productsellist', function(data){
+						$(".form-control-sm").typeahead({
+							source: data
+						});
+					},'json');
 					for (var i = 0; i < data.data.length; i++) {
 						var count = $("#" + table.options.id).bootstrapTable('getData').length;
 						var row = {
