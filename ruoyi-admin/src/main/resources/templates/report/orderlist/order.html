@@ -114,7 +114,7 @@
 						title: '商品名称',
 						formatter: function(value, row, index) {
 							//var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
-							var html = $.common.sprintf("<input type='text' placeholder='输入产品信息' class='form-control goodsName' name='goods[%s].productname' value='%s' required>", index, value);
+							var html = $.common.sprintf("<input type='text' placeholder='输入产品信息' class='form-control-sm goodsName' name='goods[%s].productname' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -219,7 +219,7 @@
 			}
 
 			$.get(plist + '/productsellist', function(data){
-				$(".form-control").typeahead({
+				$(".form-control-sm").typeahead({
 					source: data
 				});
 			},'json');
