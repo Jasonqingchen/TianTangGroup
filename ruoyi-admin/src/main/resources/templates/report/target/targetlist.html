@@ -37,7 +37,7 @@
 						年：<input type="text" name="yeas" id="yeas" placeholder="yyyy-MM-dd"/>
 					</li>
 					<li>
-						销售：<input type="text" name="ssxs" id="ssxs" placeholder="所属销售"/>
+						销售：<input type="text" name="ssxs" id="ssxs" placeholder="中方销售"/>
 					</li>
 					<!--<li>
 						<input type="date" class="form-control" name="date" id="date" placeholder="yyyy-MM-dd"/>
@@ -56,11 +56,14 @@
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 	            <i class="fa fa-remove"></i> 批量删除
 	        </a>
-			<a shiro:hasAnyRoles="admin,salesM" class="btn btn-danger multiple disabled" onclick="$.operate.fconform()">
-				<i class="fa fa-remove"></i> 数据同步
+			<a  class="btn btn-warning multiple disabled" onclick="">
+				<i class="glyphicon glyphicon-road"></i> 数据同步
+			</a>
+			<a  class="btn btn-success multiple disabled" onclick="">
+				<i class="glyphicon glyphicon-export"></i> 导出
 			</a>
 
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：数据同步为上一年该客户或代理的数据</strong></span>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：销售目标数据同步为上一年同期的该客户或代理数据</strong></span>
         </div>
 			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
 					<table id="bootstrap-table" data-resizable="true"
