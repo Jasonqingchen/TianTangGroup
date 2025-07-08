@@ -340,6 +340,30 @@ var table = {
                 actions.push('</div>');
                 return actions.join('');
             },
+            //进度条
+            jd: function (value, height, width, target) {
+                var _target = $.common.isEmpty(target) ? 'self' : target;
+                if(value>=0 && value<=50){
+                    return $.common.sprintf("<div class=\"progress progress-striped\">\n" +
+                        "                            <div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"\" style=\"width:"+ value+"%;\">\n" +value+
+                        "                                %\n" +
+                        "                            </div>\n" +
+                        "                        </div>", height, width, _target, value);
+                } else if (value>50 && value<80){
+                    return $.common.sprintf("<div class=\"progress progress-striped\">\n" +
+                        "                            <div class=\"progress-bar progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"\" style=\"width:"+ value+"%;\">\n" +value+
+                        "                                %\n" +
+                        "                            </div>\n" +
+                        "                        </div>", height, width, _target, value);
+                } else if (value>=80){
+                    return $.common.sprintf("<div class=\"progress progress-striped\">\n" +
+                        "                            <div class=\"progress-bar progress-bar\" role=\"progressbar\" aria-valuenow=\"\" aria-valuemin=\"0\" aria-valuemax=\"\" style=\"width:"+ value+"%;\">\n" +value+
+                        "                                %\n" +
+                        "                            </div>\n" +
+                        "                        </div>", height, width, _target, value);
+                }
+
+            },
             // 图片预览
             imageView: function (value, height, width, target) {
                 if ($.common.isEmpty(width)) {
