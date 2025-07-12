@@ -1,34 +1,21 @@
 package com.ruoyi.web.controller.common;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruoyi.archives.domain.ClientModel;
 import com.ruoyi.archives.mapper.FileMapper;
-import com.ruoyi.common.utils.poi.ExcelUtil;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import org.apache.commons.io.IOUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +31,6 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 
 import static com.ruoyi.archives.config.MinioConfig.bucketName;
-import static net.sf.jsqlparser.parser.feature.Feature.delete;
 
 /**
  * 通用请求处理

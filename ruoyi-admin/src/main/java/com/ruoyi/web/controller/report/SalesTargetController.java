@@ -1,51 +1,40 @@
 package com.ruoyi.web.controller.report;
 
-import cn.hutool.json.ObjectMapper;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kingdee.bos.webapi.entity.RepoRet;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
-import com.ruoyi.archives.domain.OrdersModel;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.report.domain.ClientModel;
+import com.ruoyi.report.domain.OrdersModel;
+import com.ruoyi.report.domain.TargetModel;
+import com.ruoyi.report.mapper.ClientFollowMapper;
+import com.ruoyi.report.mapper.ClientMapper;
+import com.ruoyi.report.mapper.OrdersMapper;
+import com.ruoyi.report.mapper.TargetMapper;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.product.mapper.ProOrdertMapper;
 import com.ruoyi.system.service.impl.SysUserServiceImpl;
-import okhttp3.*;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.openqa.selenium.remote.http.HttpRequest;
-import org.openqa.selenium.remote.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringBufferInputStream;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static com.ruoyi.common.core.domain.R.fail;
 
@@ -57,8 +46,25 @@ import static com.ruoyi.common.core.domain.R.fail;
 @Controller
 @RequestMapping("/report/target")
 public class SalesTargetController extends BaseController {
+    @Autowired
+    private ClientMapper cMapper;
 
+    @Autowired
+    private ClientFollowMapper fMapper;
+
+    @Autowired
+    private OrdersMapper oMapper;
+
+    @Autowired
+    private ProOrdertMapper poMapper;
+
+    @Autowired
+    private TargetMapper tMapper;
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
+
+
+
+
     private String prefix = "report/target";
     /**
      * 表格
@@ -75,14 +81,24 @@ public class SalesTargetController extends BaseController {
      */
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo rerurnlist(String par)
+    public TableDataInfo rerurnlist(TargetModel tar)
     {
-
-        return getDataTable(null);
+        startPage();
+        List<TargetModel> targetModels = tMapper.selectTargetModel(tar);
+        return getDataTable(targetModels);
     }
-
     /**
-     * 查询数据
+     * 修改保存
+     */
+    @Log(title = "目标管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(TargetModel tModel)
+    {
+        return AjaxResult.success(tMapper.updateTarget(tModel));
+    }
+    /**
+     * 调用金蝶系接口数据案例
      */
 
     public static void main(String[] args) throws IOException {
@@ -110,7 +126,50 @@ public class SalesTargetController extends BaseController {
 
 
     }
+    /**
+     * 删除
+     */
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+        String [] idss = Convert.toStrArray(ids);
+        for (String id : idss)
+        {
 
+            tMapper.deleteTargetById(id);
+        }
+        return AjaxResult.success();
+    }
 
+    /**
+     * 导出
+     */
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult exportSelected(TargetModel tModel, String targetIds)
+    {
+        List<TargetModel> targets = tMapper.selectTargetModel(tModel);
+        List<TargetModel> tList = new ArrayList<TargetModel>(Arrays.asList(new TargetModel[targets.size()]));
+        Collections.copy(tList, targets);
+
+        // 条件过滤
+        if (StringUtils.isNotEmpty(targetIds))
+        {
+            tList.clear();
+            for (Long tId : Convert.toLongArray(targetIds))
+            {
+                for (TargetModel target : targets)
+                {
+                    if (target.getId().equals(tId.toString()))
+                    {
+                        tList.add(target);
+                    }
+                }
+            }
+        }
+        ExcelUtil<TargetModel> util = new ExcelUtil<TargetModel>(TargetModel.class);
+        return util.exportExcel(tList, "目标数据");
+    }
 
 }

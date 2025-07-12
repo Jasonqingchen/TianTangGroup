@@ -3,6 +3,8 @@
 <head>
 	<th:block th:include="include :: header('表格搜索')" />
 	<th:block th:include="include :: bootstrap-select-css" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<th:block th:include="include :: bootstrap-editable-css" />
 	<link href="/static/css/wow.css" th:href="@{/css/wow.css}" rel="stylesheet"/>
 	<!-- 引入样式 -->
 	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
@@ -26,22 +28,16 @@
 <div class="container-div">
 	<div class="row">
 	<div class="col-sm-12 search-collapse wow bounceInLeft"  data-wow-duration="1s">
-		<form id="client-from">
+		<form id="target-from">
 			<input type="hidden" id="id" name="id">
 			<div class="select-list">
 				<ul>
 					<li>
-						月：<input type="text" name="month" id="month" placeholder="yyyy-MM"/>
+						销售：<input type="text" name="salesman" id="salesman" placeholder="中方销售"/>
 					</li>
 					<li>
-						年：<input type="text" name="yeas" id="yeas" placeholder="yyyy-MM-dd"/>
+						<input type="text" class="form-control" id="datetimepicker-demo-3" placeholder="日期" format="yyyy-MM">
 					</li>
-					<li>
-						销售：<input type="text" name="ssxs" id="ssxs" placeholder="中方销售"/>
-					</li>
-					<!--<li>
-						<input type="date" class="form-control" name="date" id="date" placeholder="yyyy-MM-dd"/>
-					</li>-->
 					<li>
 
 						<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -52,17 +48,16 @@
 		</form>
 	</div>
      	<div class="btn-group-sm wow bounceInRight"  data-wow-duration="1s" id="toolbar" role="group">
-
 	        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">
 	            <i class="fa fa-remove"></i> 批量删除
 	        </a>
-			<a  class="btn btn-warning multiple disabled" onclick="">
+			<a  class="btn btn-success " onclick="tbdata()">
 				<i class="glyphicon glyphicon-road"></i> 数据同步
 			</a>
-			<a  class="btn btn-success multiple disabled" onclick="">
-				<i class="glyphicon glyphicon-export"></i> 导出
+			<i class="fa fa-info-circle" style="color: red;"></i>  勾选数据导出指定列，否则为全部
+			<a class="btn btn-warning" onclick="exportSelected()">
+				<i class="fa fa-download"></i> 导出
 			</a>
-
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #bd2c00;"><strong>注意：销售目标数据同步为上一年同期的该客户或代理数据</strong></span>
         </div>
 			<div class="col-sm-12 select-table table-bordered wow bounceInRight"  data-wow-duration="1s">
@@ -75,10 +70,12 @@
 
 	<th:block th:include="include :: footer" />
 <th:block th:include="include :: bootstrap-table-resizable-js" />
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-table-editable-js" />
 <script src="/static/js/wow.js" th:src="@{/js/wow.js}"></script>
     <script th:inline="javascript">
 		new WOW().init();
-		var prefix = ctx + "product/out";
+		var prefix = ctx + "report/target";
 		var html = [];
         $(function() {
             var options = {
@@ -88,143 +85,241 @@
 				confirmorder: prefix + "/conform",
 				fconfirmoutorder: prefix + "/fconform",
 				ordersUrl: prefix + "/order/{id}",
-                exportUrl: prefix + "/export",
+				exportUrl: prefix + "/export",
                 importUrl: prefix + "/importData",
                 importTemplateUrl: prefix + "/importTemplate",
 		        showSearch: false,
 		        showRefresh: false,
 		        showToggle: false,
+				showFooter: true,
 		        showColumns: false,
 		        search: false,
 				rememberSelected: true,
 		        modalName: "客户",
 				showColumns: true,
 				models:[],
+				footerStyle: footerStyle,
+				onEditableSave: onEditableSave,
+				headerStyle: headerStyle,
                 columns: [{
 		            checkbox: true
 		        },{
-					field : '',
+					field : 'id',
 					title : '客户 ID',
 					visible:false
 				},{
-					field : '',
+					field : 'date',
+					title : '日期',
+					width:100,
+				},{
+					field : 'salesman',
 					title : '中方代理',
 					width:80,
-				},
-				{
-					field : '',
+				},{
+					field : 'agentcode',
 					title : '往来单位编码',
 					width:200,
 				},{
-						field : '',
+						field : 'agentname',
 						title : '往来单位名称',
 						width:250,
 					},{
-						field : '',
+						field : 'qcye',
 						title : '期初余额',
 						width:200,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].qcye);
 							}
-							return "总金额：" + sumBalance;
+							return "总金额：" + sumBalance + "￥";
 						}
 					},{
-						field : '',
+						field : 'bqys',
 						title : '本期应收',
 						width:200,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].bqys);
 							}
-							return "总金额：" + sumBalance;
+							return "总金额：" + sumBalance + "￥";
 						}
 					},{
-						field : '',
+						field : 'bqsk',
 						title : '本期收款',
 						width:200,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].bqsk);
 							}
-							return "总金额：" + sumBalance;
+							return "总金额：" + sumBalance + "￥";
 						}
 					},{
-						field : '',
+						field : 'qmye',
 						title : '期末余额',
 						width:200,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].qmye);
 							}
-							return "总金额：" + sumBalance;
+							return "总金额：" + sumBalance + "￥";
 						}
 					},{
-						field : '',
+						field : 'target',
 						title : '目标销售额',
+						width:100,
+						editable : {
+							type : 'number',
+							title : '目标销售额',
+							emptytext : "【目标销售额】为空",
+							validate : function(value) {
+								if (value.length == 0) {
+									return '目标销售额不能为空';
+								}
+							}
+						},
+						footerFormatter:function (value) {
+							var sumBalance = 0;
+							for (var i in value) {
+								sumBalance += parseFloat(value[i].target);
+							}
+							return "总金额：" + sumBalance + "￥";
+						}
+					},{
+						field : 'mbxscs',
+						title : '目标销售车数',
 						width:100,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].mbxscs);
 							}
-							return "总金额：" + sumBalance;
+							return "总车数：" + sumBalance + "/车";
 						}
 					},{
-						field : '',
-						title : '目标销售车数',
-						width:200,
-						footerFormatter:function (value) {
-							var sumBalance = 0;
-							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
-							}
-							return "总车数：" + sumBalance;
-						}
-					},{
-						field : '',
+						field : 'sjxscs',
 						title : '实际销售车数',
-						width:200,
+						width:100,
 						footerFormatter:function (value) {
 							var sumBalance = 0;
 							for (var i in value) {
-								sumBalance += parseFloat(value[i].userBalance);
+								sumBalance += parseFloat(value[i].sjxscs);
 							}
-							return "总实际销售车数：" + sumBalance;
+							return "总实际销售车数：" + sumBalance + "/车";
 						}
 					},{
-						field : '',
+						field : 'dqjd',
 						title : '当前进度',
 						formatter: function(value, row, index) {
-							 return $.table.jd(90);
+							 return $.table.jd(value);
 						},
-						width:200,
+						width:300,
 					},{
-		            title: '操作',
-		            align: 'center',
-					width:100,
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-						actions.push('<button class="btn btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-edit"></i>查看详情</button>&nbsp;&nbsp;&nbsp;');
+					title: '操作',
+					align: 'center',
+					width:150,
+					formatter: function(value, row, index) {
+						var actions = [];
+						actions.push('<button class="btn btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-search"></i>数据分析</button>&nbsp;&nbsp;&nbsp;');
 						return actions.join('');
-		            }
-		        }]
+					}
+				}]
             };
             $.table.init(options);
         });
+		function onEditableSave (field, row, rowIndex, oldValue, $el) {
+			$.ajax({
+				url: prefix + "/edit",
+				type: 'POST', // 或 'POST' 等其他HTTP方法
+				dataType: 'json', // 期望从服务器返回的数据类型
+				data: row,
+				async: false,
+				success: function(data) {
+					$.table.search();
+					$.modal.alertSuccess("设置目标成功")
 
+				},
+				error: function(xhr, status, error) {
+					// 请求失败，处理错误情况
+					console.error('Error: ' + error);
+				}
+			});
+		}
+		//同步数据
+		function tbdata(){
+			$.modal.alertError("本期数据已同步完成，请勿重复同步");
+		}
 		function resetPre() {
 			resetDate();
-			$("#client-from")[0].reset();
+			$("#target-from")[0].reset();
 			$.table.search();
 		}
-		/*打印*/
-		function printPage() {
-			window.print();
+		$("#datetimepicker-demo-3").datetimepicker({
+			format: "yyyy-mm",
+			minView: "year",
+			autoclose: true,
+			clearBtn:true
+		});
+		// 导出数据
+		function exportSelected() {
+			var targetIds = $.table.selectColumns("id");
+			var dataParam = $("#target-from").serializeArray();
+			var tipMsg = "确定导出所有数据吗？";
+			if($.common.isNotEmpty(targetIds)){
+				tipMsg = "确定导出勾选" + targetIds.length + "条数据吗？";
+				dataParam.push({ "name": "targetIds", "value": targetIds });
+			}
+			$.modal.confirm(tipMsg, function() {
+				$.post(prefix + "/export", dataParam, function(result) {
+					if (result.code == web_status.SUCCESS) {
+						window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+					} else {
+						$.modal.alertError(result.msg);
+					}
+				});
+			});
+		}
+		//表头样式
+		function headerStyle(column) {
+			return {
+				target: {
+					css: { background: 'yellow' }
+				},
+				userBalance: {
+					css: { color: 'red' }
+				}
+			} [column.field]
+		}
+		function footerStyle(column) {
+			return {
+//         	    userBalance: {
+//         	        classes: 'class'
+//         	    },
+				qcye: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				bqys: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				bqsk: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				qmye: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				target: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				mbxscs: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				},
+				sjxscs: {
+					css: { color: 'red', 'font-weight': 'normal' }
+				}
+			}[column.field]
 		}
     </script>
 </body>

@@ -1,4 +1,4 @@
-package com.ruoyi.archives.domain;
+package com.ruoyi.report.domain;
 
 
 import com.ruoyi.common.annotation.Excel;

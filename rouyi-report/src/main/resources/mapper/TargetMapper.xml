@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.report.mapper.TargetMapper">
+
+	<resultMap type="TargetModel" id="TargetResult">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="date" jdbcType="VARCHAR" property="date" />
+		<result column="salesman" jdbcType="VARCHAR" property="salesman" />
+		<result column="agentname" jdbcType="VARCHAR" property="agentname" />
+		<result column="salesmanid" jdbcType="VARCHAR" property="salesmanid" />
+		<result column="agentcode" jdbcType="VARCHAR" property="agentcode" />
+		<result column="customercode" jdbcType="VARCHAR" property="customercode" />
+		<result column="customer" jdbcType="VARCHAR" property="customer" />
+		<result column="cusplace" jdbcType="VARCHAR" property="cusplace" />
+		<result column="target" jdbcType="VARCHAR" property="target" />
+		<result column="bqys" jdbcType="VARCHAR" property="bqys" />
+		<result column="bqsk" jdbcType="VARCHAR" property="bqsk" />
+		<result column="qcye" jdbcType="VARCHAR" property="qcye" />
+		<result column="qmye" jdbcType="VARCHAR" property="qmye" />
+		<result column="mbxscs" jdbcType="VARCHAR" property="mbxscs" />
+		<result column="sjxscs" jdbcType="VARCHAR" property="sjxscs" />
+		<result column="dqjd" jdbcType="VARCHAR" property="dqjd" />
+	</resultMap>
+
+	<!--根据 ID 查询跟进详情-->
+	<select id="selectTargetModel"  resultMap="TargetResult">
+		select  * from target as t  where 1=1
+		<if test="id != null and id != ''">
+			AND t.id = #{id}
+		</if>
+		<if test="salesman != null and salesman != ''">
+			AND t.salesman like concat('%', #{salesman}, '%')
+		</if>
+		<if test="date != null and date != ''">
+			AND t.date like concat('%', #{date}, '%')
+		</if>
+
+	</select>
+
+	<!--删除-->
+	<delete id="deleteTargetById">
+		delete from target as t  where t.id = #{id}
+	</delete>
+
+	<!--修改信息-->
+	<update id="updateTarget" parameterType="TargetModel">
+		update target
+		<set>
+			<if test="id != null and id != ''">id = #{id},</if>
+			<if test="date != null and date != ''">date = #{date},</if>
+			<if test="salesman != null and salesman != ''">salesman = #{salesman},</if>
+			<if test="agentname != null and agentname != ''">agentname = #{agentname},</if>
+			<if test="salesmanid != null and salesmanid != ''">salesmanid = #{salesmanid},</if>
+			<if test="agentcode != null and agentcode != ''">agentcode = #{agentcode},</if>
+			<if test="customercode != null and customercode != ''">customercode = #{customercode},</if>
+			<if test="customer != null and customer != ''">customer = #{customer},</if>
+			<if test="cusplace != null and cusplace != ''">cusplace = #{cusplace},</if>
+			<if test="target != null and target != ''">target = #{target},</if>
+			<if test="bqys != null and bqys != ''">bqys = #{bqys},</if>
+			<if test="bqsk != null and bqsk != ''">bqsk = #{bqsk},</if>
+			<if test="qcye != null and qcye != ''">qcye = #{qcye},</if>
+			<if test="qmye != null and qmye != ''">qmye = #{qmye},</if>
+			<if test="mbxscs != null and mbxscs != ''">mbxscs = #{mbxscs},</if>
+			<if test="sjxscs != null and sjxscs != ''">sjxscs = #{sjxscs},</if>
+			<if test="dqjd != null and dqjd != ''">dqjd = #{dqjd}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+</mapper> 

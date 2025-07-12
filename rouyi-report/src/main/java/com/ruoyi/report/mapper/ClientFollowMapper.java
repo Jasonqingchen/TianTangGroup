@@ -1,8 +1,8 @@
-package com.ruoyi.archives.mapper;
+package com.ruoyi.report.mapper;
 
 
 
-import com.ruoyi.archives.domain.ClientFollowModel;
+import com.ruoyi.report.domain.ClientFollowModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

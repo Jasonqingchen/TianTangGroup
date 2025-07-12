@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.archives.mapper.OrdersMapper">
+<mapper namespace="com.ruoyi.report.mapper.OrdersMapper">
 
 	<resultMap type="OrdersModel" id="OrderResult">
 		<id column="id" jdbcType="VARCHAR" property="id" />

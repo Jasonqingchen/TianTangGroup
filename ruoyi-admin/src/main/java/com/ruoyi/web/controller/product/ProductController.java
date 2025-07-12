@@ -1,7 +1,5 @@
 package com.ruoyi.web.controller.product;
 
-import com.ruoyi.archives.domain.ClientModel;
-import com.ruoyi.archives.domain.FileModel;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -33,11 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.ruoyi.archives.util.FileUploadUtils.removeFile;
 import static com.ruoyi.common.utils.PageUtils.startPage;
 
 /**

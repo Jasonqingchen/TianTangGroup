@@ -1,8 +1,8 @@
 package com.ruoyi.web.controller.product;
 
-import com.ruoyi.archives.domain.OrdersModel;
-import com.ruoyi.archives.mapper.ClientMapper;
-import com.ruoyi.archives.mapper.OrdersMapper;
+import com.ruoyi.report.domain.OrdersModel;
+import com.ruoyi.report.mapper.ClientMapper;
+import com.ruoyi.report.mapper.OrdersMapper;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
