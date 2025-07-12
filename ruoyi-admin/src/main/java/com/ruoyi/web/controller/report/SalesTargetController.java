@@ -27,10 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -104,6 +102,11 @@ public class SalesTargetController extends BaseController {
     public static void main(String[] args) throws IOException {
         String par = "";
         par+="fId";
+        par+=",FSALEERID";//销售员
+        par+=",FSALEORGID";//销售组织
+        par+=",FSALEORGID";//销售组织
+
+
         String table ="";
         table+="AR_receivable";
         K3CloudApi client = new K3CloudApi();
@@ -111,14 +114,16 @@ public class SalesTargetController extends BaseController {
         Type listType = new TypeToken<List<List<Integer>>>(){}.getType();
         //请求参数，要求为json字符串
         String jsonData = "{\"FormId\":\""+table+"\",\"FieldKeys\":\""+par+"\",\"FilterString\":[],\"OrderString\":\"\",\"TopRowCount\":0,\"StartRow\":0,\"Limit\":10,\"SubSystemId\":\"\"}";
+        //System.out.println("接口返回结果: " + jsonData);
         try {
             //调用接口
             String resultJson = String.valueOf(client.executeBillQuery(jsonData));
             List<List<Integer>> listOfLists = gson.fromJson(resultJson, listType);
             listOfLists.forEach(re->{
-                re.forEach(ss->{
-                    System.out.println("接口返回结果: " + ss);
-                });
+                System.out.println("接口返回结果: " + re);
+                /*re.forEach(ss->{
+
+                });*/
             });
         } catch (Exception e) {
             fail(e.getMessage());
@@ -142,6 +147,15 @@ public class SalesTargetController extends BaseController {
         return AjaxResult.success();
     }
 
+
+    /**
+     * 历史数据跳转
+     */
+    @GetMapping("/targeTcount/{id}")
+    public String targeTcount(@PathVariable("id") String id, ModelMap mmap)
+    {
+        return prefix + "/order";
+    }
     /**
      * 导出
      */
@@ -157,11 +171,11 @@ public class SalesTargetController extends BaseController {
         if (StringUtils.isNotEmpty(targetIds))
         {
             tList.clear();
-            for (Long tId : Convert.toLongArray(targetIds))
+            for (String tId : Convert.toStrArray(targetIds))
             {
                 for (TargetModel target : targets)
                 {
-                    if (target.getId().equals(tId.toString()))
+                    if (target.getId().equals(tId))
                     {
                         tList.add(target);
                     }

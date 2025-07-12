@@ -1307,28 +1307,17 @@ var table = {
                     $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
                 }
             },
-            // 修改信息
-            order: function(id) {
+            // 历史数据
+            targeTcount: function(id) {
                 table.set();
-                $.modal.open("修改订单" + table.options.modalName, $.operate.orderUrl(id));
+                $.modal.open("历史数据分析表" + table.options.modalName, $.operate.targeTcountUrl(id));
             },
 
 
 
-            // 修改访问地址
-            orderUrl: function(id) {
-                var url = "/404.html";
-                if ($.common.isNotEmpty(id)) {
-                    url = table.options.ordersUrl.replace("{id}", id);
-                } else {
-                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-                    if (id.length == 0) {
-                        $.modal.alertWarning("请至少选择一条记录");
-                        return;
-                    }
-                    url = table.options.ordersUrl.replace("{id}", id);
-                }
-                return url;
+            // 历史数据
+            targeTcountUrl: function(id) {
+                return table.options.targeTcountUrl.replace("{id}", id);
             },
 
 

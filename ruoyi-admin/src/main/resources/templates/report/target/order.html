@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('历史数据')" />
+</head>
+
+<body class="white-bg">
+<div class="main-content">
+	<div class="row wow flipInY"  data-wow-duration="2s">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="float-right" style="height: 400px;" id="echarts1"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row wow flipInY"  data-wow-duration="2s">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="float-right" style="height: 400px;" id="echarts4"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row wow flipInY"  data-wow-duration="2s">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="float-right" style="height: 800px;" id="echarts2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+	<script type="text/javascript">
+		var prefix = ctx + "report/listdata";
+		function submitHandler() {
+			$.modal.close();
+		}
+		var c4 = echarts.init(document.getElementById("echarts4"));
+		option4 = {
+			title: {
+				text: '本年度销售数据',
+				subtext: ''
+			},
+			tooltip: {
+				trigger: 'axis'
+			},
+			legend: {
+				data: ['目标销售', '实际回款']
+			},
+			toolbox: {
+				show: true,
+				feature: {
+					dataView: { show: true, readOnly: false },
+					magicType: { show: true, type: ['line', 'bar'] },
+					restore: { show: true },
+					saveAsImage: { show: true }
+				}
+			},
+			calculable: true,
+			xAxis: [
+				{
+					type: 'category',
+					// prettier-ignore
+					data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '目标销售',
+					type: 'bar',
+					data: [
+						2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+					],
+					markPoint: {
+						data: [
+							{ type: 'max', name: 'Max' },
+							{ type: 'min', name: 'Min' }
+						]
+					},
+					markLine: {
+						data: [{ type: 'average', name: 'Avg' }]
+					}
+				},
+				{
+					name: '实际回款',
+					type: 'bar',
+					data: [
+						2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+					],
+					markPoint: {
+						data: [
+							{ name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
+							{ name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
+						]
+					},
+					markLine: {
+						data: [{ type: 'average', name: 'Avg' }]
+					}
+				}
+			]
+		};
+		c4.setOption(option4);
+		$(window).resize(c4.resize);
+		//注释
+		var c1 = echarts.init(document.getElementById("echarts1"));
+		option1 = {
+			title: {
+				text: '销售车数表现统计'
+			},
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					type: 'cross',
+					label: {
+						backgroundColor: '#6a7985'
+					}
+				}
+			},
+			legend: {
+				data: ['Email', 'Union Ads']
+			},
+			toolbox: {
+				feature: {
+					saveAsImage: {}
+				}
+			},
+			grid: {
+				left: '3%',
+				right: '4%',
+				bottom: '3%',
+				containLabel: true
+			},
+			xAxis: [
+				{
+					type: 'category',
+					boundaryGap: false,
+					data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+				}
+			],
+			yAxis: [
+				{
+					type: 'value'
+				}
+			],
+			series: [
+				{
+					name: '目标销售车数',
+					type: 'line',
+					stack: 'Total',
+					areaStyle: {},
+					emphasis: {
+						focus: 'series'
+					},
+					data: [120, 132, 101, 134, 90, 230, 210, 101, 134, 90, 230, 210]
+				},
+				{
+					name: '实际销售车数',
+					type: 'line',
+					stack: 'Total',
+					areaStyle: {},
+					emphasis: {
+						focus: 'series'
+					},
+					data: [220, 182, 191, 234, 290, 330, 310, 101, 134, 90, 230, 210]
+				}
+			]
+		};
+		c1.setOption(option1);
+		$(window).resize(c1.resize);
+		//注释
+		var c2 = echarts.init(document.getElementById("echarts2"));
+		option2 = {
+			title: {
+				text: '各月完成占比'
+			},
+			legend: {
+				top: 'bottom'
+			},
+			toolbox: {
+				show: true,
+				feature: {
+					mark: { show: true },
+					dataView: { show: true, readOnly: false },
+					restore: { show: true },
+					saveAsImage: { show: true }
+				}
+			},
+			series: [
+				{
+					name: 'Nightingale Chart',
+					type: 'pie',
+					radius: [50, 250],
+					center: ['50%', '50%'],
+					roseType: 'area',
+					itemStyle: {
+						borderRadius: 8
+					},
+					data: [
+						{ value: 40, name: '一月 40%' },
+						{ value: 40, name: '二月 152%' },
+						{ value: 40, name: '三月 180%' },
+						{ value: 40, name: '四月 40%' },
+						{ value: 40, name: '五月 25%' },
+						{ value: 40, name: '六月 40%' },
+						{ value: 40, name: '七月 60%' },
+						{ value: 40, name: '八月 40%' },
+						{ value: 40, name: '九月 85%' },
+						{ value: 40, name: '十月 40%' },
+						{ value: 40, name: '十一月 75%' },
+						{ value: 40, name: '十二月 25%' }
+					]
+				}
+			]
+		};
+		c2.setOption(option2);
+		$(window).resize(c2.resize);
+	</script>
+</body>
+</html>

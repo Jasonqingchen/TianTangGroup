@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="/static/css/elmentindex.css" th:href="@{/css/elmentindex.css}"/>
 </head>
 <style>
+	#submit-button {
+		display: none;
+	}
 	@media print {
 		body * {
 			visibility: hidden;
@@ -77,6 +80,7 @@
 		new WOW().init();
 		var prefix = ctx + "report/target";
 		var html = [];
+
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -84,7 +88,7 @@
                 removeUrl: prefix + "/remove",
 				confirmorder: prefix + "/conform",
 				fconfirmoutorder: prefix + "/fconform",
-				ordersUrl: prefix + "/order/{id}",
+				targeTcountUrl: prefix + "/targeTcount/{id}",
 				exportUrl: prefix + "/export",
                 importUrl: prefix + "/importData",
                 importTemplateUrl: prefix + "/importTemplate",
@@ -95,7 +99,7 @@
 		        showColumns: false,
 		        search: false,
 				rememberSelected: true,
-		        modalName: "客户",
+		        modalName: "",
 				showColumns: true,
 				models:[],
 				footerStyle: footerStyle,
@@ -223,7 +227,7 @@
 					width:150,
 					formatter: function(value, row, index) {
 						var actions = [];
-						actions.push('<button class="btn btn-xs" href="javascript:;" onclick="$.operate.order(\'' + row.id + '\')"><i class="fa fa-search"></i>数据分析</button>&nbsp;&nbsp;&nbsp;');
+						actions.push('<button class="btn btn-xs" href="javascript:;" onclick="$.operate.targeTcount(\'' + row.id + '\')"><i class="fa fa-search"></i>历史数据</button>&nbsp;&nbsp;&nbsp;');
 						return actions.join('');
 					}
 				}]
