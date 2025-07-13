@@ -7,8 +7,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.report.domain.ClientModel;
-import com.ruoyi.report.domain.OrdersModel;
 import com.ruoyi.report.domain.TargetModel;
 import com.ruoyi.report.mapper.ClientFollowMapper;
 import com.ruoyi.report.mapper.ClientMapper;
@@ -102,9 +100,7 @@ public class SalesTargetController extends BaseController {
     public static void main(String[] args) throws IOException {
         String par = "";
         par+="fId";
-        par+=",FSALEERID";//销售员
-        par+=",FSALEORGID";//销售组织
-        par+=",FSALEORGID";//销售组织
+        par+=",FChargeid";//付款方
 
 
         String table ="";
