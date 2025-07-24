@@ -62,7 +62,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<button type="button" class="btn btn-white btn-sm" onclick="addRow()"><i class="fa fa-plus"> 增加</i></button>
-				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRows()"><i class="fa fa-minus"> 删除</i></button>
+				<button type="button" class="btn btn-white btn-sm" onclick="sub.delRow()"><i class="fa fa-minus"> 删除</i></button>
 				<div class="col-sm-12 select-table table-striped">
 					<table id="bootstrap-table"></table>
 				</div>
@@ -109,7 +109,7 @@
 						title: '商品名称',
 						formatter: function(value, row, index) {
 							//var html = $.common.sprintf("<input class='form-control goodsName' type='text' name='goods[%s].productname' value='%s'>", index, value);
-							var html = $.common.sprintf("<input type='text' placeholder='输入产品信息' class='form-control goodsName' name='goods[%s].productname' value='%s' required>", index, value);
+							var html = $.common.sprintf("<input type='text' placeholder='输入产品信息' class='form-control-sm goodsName' name='goods[%s].productname' value='%s' required>", index, value);
 							return html;
 						}
 					},
@@ -145,7 +145,7 @@
 						align: 'center',
 						formatter: function(value, row, index) {
 							var value = $.common.isNotEmpty(row.index) ? row.index : $.table.serialNumber(index);
-							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delrow(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
+							return '<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="sub.delRowByIndex(\'' + value + '\')"><i class="fa fa-remove"></i>删除</a>';
 						}
 					}]
 			};
@@ -199,24 +199,13 @@
 			}
 
 			$.get(plist + '/productsellist', function(data){
-				document.getElementsByName("productname").typeahead({
+				$(".form-control-sm").typeahead({
 					source: data
 				});
 			},'json');
 			sub.addRow(row);
-			//查询商品信息
-			/*fetch(plist + '/productsellist')
-					.then(response => response.json())
-					.then(data => {
-						var optionss = '';
-						data.forEach(item => {
-							$(".form-control").append(`<option value="${item.productname}">${item.productname}</option>`);
-						});
-
-					}).catch(error => console.error('Error:', error));*/
 
 		}
-
 
 
 	</script>
